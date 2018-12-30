@@ -11,8 +11,13 @@ namespace MvcDemand
 {
     public class ClassDataBase
     {
+        /*  程式名稱    :   ClassDataBase.cs
+         *  程式人員    :   Wilson Cheng
+         *  程式
+         * 
+         */ 
 
-        static string msConnValue = "Data Source=localhost; User ID=admSQL; password=t/6ru8jo3; Initial Catalog=dbDemand";
+        static string msConnValue = "Data Source=localhost; User ID=adm; password=adm; Initial Catalog=dbDemand";
         static System.Data.SqlClient.SqlConnection msConn = new System.Data.SqlClient.SqlConnection();
         static System.Data.SqlClient.SqlCommand msComm = new System.Data.SqlClient.SqlCommand();
         static System.Data.SqlClient.SqlDataAdapter msDa = new System.Data.SqlClient.SqlDataAdapter();
@@ -126,6 +131,7 @@ namespace MvcDemand
             switch (ReturnShowClass)
             {
                 case "VF": ReturnShowDate = ReturnYear + ReturnMonth + ReturnDay + ReturnHour + ReturnMinute + ReturnSecond; break;
+                case "VM": ReturnShowDate = ReturnYear + ReturnMonth; break;
                 case "VD": ReturnShowDate = ReturnYear + ReturnMonth + ReturnDay; break;
                 case "VT": ReturnShowDate = ReturnHour + ReturnMinute + ReturnDay; break;
                 case "SF": ReturnShowDate = ReturnYear + "/" + ReturnMonth + "/" + ReturnDay + "  " + ReturnHour + ":" + ReturnMinute + ":" + ReturnSecond; break;
@@ -178,6 +184,7 @@ namespace MvcDemand
                         }
                     break;
             }
+            
             SqlConnection conn = new SqlConnection(msConnValue); conn.Open();
             SqlCommand comm = new SqlCommand(funExecuteSQL, conn);
             if (funDicPara != null) {
@@ -185,7 +192,7 @@ namespace MvcDemand
                     comm.Parameters.AddWithValue(item.Key.ToString(), item.Value.ToString());
                 }
             }
-            rtnExecValue = (comm.ExecuteNonQuery() == 1) ? "O" : "X";
+            rtnExecValue = (comm.ExecuteNonQuery() == 1) ? "O" : "X";                        
             return rtnExecValue;
         }
 
