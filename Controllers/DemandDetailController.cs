@@ -10,15 +10,31 @@ namespace MvcDemand.Controllers
     public class DemandDetailController : Controller
     {
 
+        /* 函數名稱         :   DemandDetailController.cs
+         * 程式人員         :   Wilson Cheng
+         * 函數更新紀錄     :
+         *                      2018-11-20                  新建函數
+         *                      Index                       進入頁面時導入第一個函數 
+         *                      Create                      進行新增需求申請單基本資料
+         *                      Create Post                 進行新增表單資料到資料庫
+         *                      Upload                      上傳需求申請單所需檔案到資料庫及資料夾中
+         *                      returnValueToAccIndex       取得需求申請單序號
+         */
+
+        /// <summary>
+        /// 定義變數
+        /// </summary>
         SystemDataDetailModels sdModel = new SystemDataDetailModels();
         DemandDetailModels ddModel = new DemandDetailModels();
         AccountDetailModels adModel = new AccountDetailModels();
         AccountRelationModels arModel = new AccountRelationModels();
         ClassDataBase dbClass = new ClassDataBase();
 
-        //
-        // GET: /DemandDetail/
-
+        /// <summary>
+        /// 函數名稱    :   Index
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
         public ActionResult Index(DemandDetailModels viewModel)
         {
             viewModel.objDemandDetail = ddModel.objDemandDetailData();
@@ -28,6 +44,11 @@ namespace MvcDemand.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// 函數名稱    :   Create
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
         public ActionResult Create(DemandDetailModels viewModel)
         {
             viewModel.selDemandClass = sdModel.selObjSystemDataDetail("DemandClass", "請選擇", "");
@@ -43,7 +64,11 @@ namespace MvcDemand.Controllers
             return View(viewModel);
         }
 
-        
+        /// <summary>
+        /// 函數名稱    :   Create  HttpPost
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateInput(false)]
         public RedirectResult Create(FormCollection form)
@@ -91,6 +116,12 @@ namespace MvcDemand.Controllers
             
         }
 
+        /// <summary>
+        /// 函數名稱    :   Upload
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <param name="fDemandIndex"></param>
+        /// <returns></returns>
         public ActionResult Upload(DemandDetailModels viewModel, string fDemandIndex)
         {
             viewModel.vDemandIndex = fDemandIndex;
@@ -98,6 +129,11 @@ namespace MvcDemand.Controllers
             return View(viewModel);
         }
         
+        /// <summary>
+        /// 函數名稱    :   returnValueToAccIndex
+        /// </summary>
+        /// <param name="fAccIndex"></param>
+        /// <returns></returns>
         public string returnValueToAccIndex(string fAccIndex)
         {
             string returnValue = ""; string oAccDeptNo = "";

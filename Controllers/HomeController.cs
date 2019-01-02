@@ -11,12 +11,30 @@ namespace MvcDemand.Controllers
     public class HomeController : Controller
     {
 
+        /* 函數名稱         :   HomeController.cs
+         * 程式人員         :   Wilson Cheng
+         * 函數更新紀錄     :
+         *                      2018-11-20                  新建函數
+         *                      Index                       進入頁面時導入第一個函數 
+         *                      Login                       登入會員帳號密碼頁面
+         *                      LogOut                      登出系統回到登入首頁
+         *                      LoginSessionValue           會員帳號密碼正確後建立Session值
+         *                      returnCheckLoginData        驗證會員帳號密碼是否正確
+         *                      funExecutePassword          修改會員帳號密碼
+         */
+
+        /// <summary>
+        /// 定義變數
+        /// </summary>
         ClassDataBase dbClass = new ClassDataBase();
         AccountDetailModels adModel = new AccountDetailModels();
         AccountRelationModels arModel = new AccountRelationModels();
         DemandDetailModels ddModel = new DemandDetailModels();
 
-
+        /// <summary>
+        /// 函數名稱    :   Index
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             if (Session["AccIndex"] == null)
@@ -31,17 +49,30 @@ namespace MvcDemand.Controllers
             
         }
 
+        /// <summary>
+        /// 函數名稱    :   Login
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Login()
         {
             return View();
         }
 
+        /// <summary>
+        /// 函數名稱    :   LogOut
+        /// </summary>
+        /// <returns></returns>
         public RedirectResult LogOut()
         {
             Session.Abandon();
             return Redirect("~/Home/Login");
         }
 
+        /// <summary>
+        /// 函數名稱    :   LoginSessionValue
+        /// </summary>
+        /// <param name="post"></param>
+        /// <returns></returns>
         [HttpPost]
         public RedirectResult LoginSessionValue(FormCollection post)
         {
@@ -51,6 +82,12 @@ namespace MvcDemand.Controllers
             return Redirect("~/Home/Index");
         }
 
+        /// <summary>
+        /// 函數名稱    :   returnCheckLoginData
+        /// </summary>
+        /// <param name="fLoginNo"></param>
+        /// <param name="fLoginPass"></param>
+        /// <returns></returns>
         public string returnCheckLoginData(string fLoginNo, string fLoginPass)
         {
             string funReturnValue = ""; string fPassValue = "";
@@ -70,6 +107,14 @@ namespace MvcDemand.Controllers
             return funReturnValue;
         }
 
+        /// <summary>
+        /// 函數名稱    :   funExecutePassword
+        /// </summary>
+        /// <param name="execClass"></param>
+        /// <param name="fAccIndex"></param>
+        /// <param name="fPassword"></param>
+        /// <param name="nPassword"></param>
+        /// <returns></returns>
         public string funExecutePassword(string execClass, string fAccIndex, string fPassword , string nPassword)
         {
             string funReturnValue = ""; string cPassValue = "";

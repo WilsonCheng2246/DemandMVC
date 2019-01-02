@@ -11,12 +11,23 @@ namespace MvcDemand
 {
     public class ClassDataBase
     {
-        /*  程式名稱    :   ClassDataBase.cs
-         *  程式人員    :   Wilson Cheng
-         *  程式
-         * 
-         */ 
+        /*  程式名稱        :   ClassDataBase.cs
+         *  程式人員        :   Wilson Cheng
+         *  程式更新紀錄    :   
+         *                      2018-11-20  新建資料庫連線函數
+         *                                  msDataTableToDataBase       取得資料庫的資料轉成DataTable
+         *                                  msCheckValueToDataBase      驗證是否有資料庫資料
+         *                                  msExecuteValueToDataBase    執行資料庫語法
+         *                                  rtnByteReadFormFile         由網頁原始碼轉為PDF格式
+         *                                  GetListToNewDictionary      將兩個List內容轉為Dictionary
+         *                                  ReturnDetailToNowDateTime   取得目前日期時間轉換為相關文字內容
+         *                                  ReturnToRandomValue         亂數產生數字後組成字串
+         *                                  msExecuteDataBase           新增更新刪除資料庫資料
+         */
 
+        /// <summary>
+        ///             定義變數
+        /// </summary>
         static string msConnValue = "Data Source=localhost; User ID=adm; password=adm; Initial Catalog=dbDemand";
         static System.Data.SqlClient.SqlConnection msConn = new System.Data.SqlClient.SqlConnection();
         static System.Data.SqlClient.SqlCommand msComm = new System.Data.SqlClient.SqlCommand();
@@ -29,6 +40,12 @@ namespace MvcDemand
         static string msExecuteSQL { get; set; }
         static Dictionary<string, object> msDicPara { get; set; }        
 
+        /// <summary>
+        /// 函數名稱    :   msDataTableToDataBase 
+        /// </summary>
+        /// <param name="rtnQuerySQL"></param>
+        /// <param name="valDicPara"></param>
+        /// <returns></returns>
         public DataTable msDataTableToDataBase(string rtnQuerySQL, Dictionary<string, object> valDicPara)
         {
             msDs.Clear(); msDT.Clear();
@@ -50,6 +67,12 @@ namespace MvcDemand
             return msDT;
         }
 
+        /// <summary>
+        /// 函數名稱    :   msCheckValueToDataBase
+        /// </summary>
+        /// <param name="rtnQuerySQL"></param>
+        /// <param name="valDicPara"></param>
+        /// <returns></returns>
         public string msCheckValueToDataBase(string rtnQuerySQL, Dictionary<string, object> valDicPara) {
             msRtnValue = ""; msDT.Clear();
             try {
@@ -62,6 +85,12 @@ namespace MvcDemand
             return msRtnValue;
         }
 
+        /// <summary>
+        /// 函數名稱    :   msExecuteValueToDataBase
+        /// </summary>
+        /// <param name="rtnExecuteSQL"></param>
+        /// <param name="valDicPara"></param>
+        /// <returns></returns>
         public string msExecuteValueToDataBase(string rtnExecuteSQL, Dictionary<string, object> valDicPara)
         {
             msExecuteValue = "";
@@ -83,6 +112,11 @@ namespace MvcDemand
             return msExecuteValue;
         }
 
+        /// <summary>
+        /// 函數名稱    :   rtnByteReadFormFile
+        /// </summary>
+        /// <param name="sendHtmlValue"></param>
+        /// <returns></returns>
         public byte[] rtnByteReadFromFile(string sendHtmlValue) {
             System.IO.FileStream fs = System.IO.File.OpenRead(sendHtmlValue);
             byte[] rtnData = new byte[fs.Length];
@@ -91,6 +125,12 @@ namespace MvcDemand
             return rtnData;
         }
 
+        /// <summary>
+        /// 函數名稱    :   GetListToNewDictionary
+        /// </summary>
+        /// <param name="listDicKey"></param>
+        /// <param name="listDicValue"></param>
+        /// <returns></returns>
         public Dictionary<string, object> GetListToNewDictionary(List<string> listDicKey, List<object> listDicValue) {
             msDicPara = new Dictionary<string, object>();
             try {
@@ -103,6 +143,11 @@ namespace MvcDemand
             return msDicPara;
         }
 
+        /// <summary>
+        /// 函數名稱    :   ReturnDetailToNowDateTime
+        /// </summary>
+        /// <param name="ReturnShowClass"></param>
+        /// <returns></returns>
         public string ReturnDetailToNowDateTime(string ReturnShowClass)
         {
             string ReturnYear, ReturnMonth, ReturnDay, ReturnHour;
@@ -144,6 +189,12 @@ namespace MvcDemand
             return ReturnShowDetailValue;
         }
 
+        /// <summary>
+        /// 函數名稱    :   ReturnToRandomValue
+        /// </summary>
+        /// <param name="funStrValue"></param>
+        /// <param name="RanLen"></param>
+        /// <returns></returns>
         public string ReturnToRandomValue(string funStrValue, int RanLen)
         {
             string rtnValue = ""; string ranValue = "";
@@ -155,6 +206,15 @@ namespace MvcDemand
             return rtnValue;
         }
 
+        /// <summary>
+        /// 函數名稱    :   msExecuteDataBase
+        /// </summary>
+        /// <param name="execClass"></param>
+        /// <param name="execTableName"></param>
+        /// <param name="chkLen"></param>
+        /// <param name="aryDeclareName"></param>
+        /// <param name="aryDeclareValue"></param>
+        /// <returns></returns>
         public string msExecuteDataBase(string execClass, string execTableName, int chkLen, List<string> aryDeclareName, List<object> aryDeclareValue)
         {
             string rtnExecValue = ""; string funExecuteSQL = "";
@@ -195,7 +255,6 @@ namespace MvcDemand
             rtnExecValue = (comm.ExecuteNonQuery() == 1) ? "O" : "X";                        
             return rtnExecValue;
         }
-
-        
+                
     }
 }

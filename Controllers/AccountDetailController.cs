@@ -15,6 +15,24 @@ namespace MvcDemand.Controllers
 {
     public class AccountDetailController : Controller
     {
+
+        /* 函數名稱         :   AccountDetailController.cs
+         * 程式人員         :   Wilson Cheng
+         * 函數更新紀錄     :
+         *                      2018-11-20      新建函數
+         *                      Index           進入頁面時導入第一個函數   
+         *                      getBindData     取得會員資料並且將新增資料的相關選單資料導入
+         *                      checkAccNo      驗證會員帳號是否重複
+         *                      Create          進行新增會員資料表單資料到資料庫    Post
+         *                      FormUpdate      點選按鈕移到更新資料庫表單畫面
+         *                      Update          進行更新會員資料表單資料到資料庫    Post
+         *                      Upload          使用Excel檔案上傳新增會員資料到資料庫
+         *                      OutToExcel      將會員資料匯出成為Excel檔案
+         */
+
+        /// <summary>
+        /// 定義變數
+        /// </summary>
         AccountDetailModels adModel = new AccountDetailModels();
         SystemDataDetailModels sddModel = new SystemDataDetailModels();
         ClassDataBase dbClass = new ClassDataBase();
@@ -23,12 +41,24 @@ namespace MvcDemand.Controllers
             , "@AccJobNo" , "@AccMobile", "@AccPhone", "@AccEmail",  "@AccPassword"
             , "@AccNotation", "@AccImage", "@AccDateS", "@AccDateE", "@AccStatus","@AccNotationS" };
         
+        /// <summary>
+        /// 函數名稱    :   Index
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
         public ActionResult Index(AccountDetailModels viewModel)
         {
             getBindData("", "1", viewModel);
             return View(viewModel);
         }
 
+        /// <summary>
+        /// 函數名稱    :   getBindData
+        /// </summary>
+        /// <param name="fSearchValue"></param>
+        /// <param name="fPageIndex"></param>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
         public PartialViewResult getBindData(string fSearchValue, string fPageIndex , AccountDetailModels viewModel) {
             List<oAccountDetail> accList = new List<oAccountDetail>();
             accList = adModel.listObjAccountDetail();
@@ -62,6 +92,11 @@ namespace MvcDemand.Controllers
             return PartialView("List", viewModel);
         }
 
+        /// <summary>
+        /// 函數名稱    :   checkAccNo 
+        /// </summary>
+        /// <param name="funAccNo"></param>
+        /// <returns></returns>
         public string checkAccNo(string funAccNo)
         {
             string rtnValue = ""; int chkCount = 0;
@@ -70,6 +105,11 @@ namespace MvcDemand.Controllers
             return rtnValue;
         }
 
+        /// <summary>
+        /// 函數名稱    :   Create  HttpPost
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateInput(false)]
         public RedirectResult Create(FormCollection form)
@@ -87,6 +127,12 @@ namespace MvcDemand.Controllers
             return Redirect("~/AccountDetail/Index");
         }
 
+        /// <summary>
+        /// 函數名稱    :   FormUpdate
+        /// </summary>
+        /// <param name="fAccIndex"></param>
+        /// <param name="fAccNo"></param>
+        /// <returns></returns>
         public  JsonResult FormUpdate(string fAccIndex, string fAccNo) {
             List<oAccountDetail> deList = new List<oAccountDetail>();
             deList = adModel.detailObjAccountDetail(fAccIndex, fAccNo);
@@ -98,6 +144,11 @@ namespace MvcDemand.Controllers
             return Json(rtnData);
         }
 
+        /// <summary>
+        /// 函數名稱    :   Update
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateInput(false)]
         public RedirectResult Update(FormCollection form)
@@ -123,6 +174,11 @@ namespace MvcDemand.Controllers
             return Redirect("~/AccountDetail/Index");    
         }
 
+        /// <summary>
+        /// 函數名稱    :   Upload
+        /// </summary>
+        /// <param name="fileUpload"></param>
+        /// <returns></returns>
         [HttpPost]
         public RedirectResult Upload(HttpPostedFileBase fileUpload)
         {
@@ -196,6 +252,9 @@ namespace MvcDemand.Controllers
             return Redirect("~/AccountDetail/Index");
         }
 
+        /// <summary>
+        /// 函數名稱    :   OutToExcel
+        /// </summary>
         public void OutToExcel() {
             List<string> listExcelTitle = new List<string>() { "AccNo", "AccName", "AccClass", "AccDeptNo", "AccJobNo", "AccMobile", "AccPhone", "AccEmail" };
             List<oAccountDetail> acList = new List<oAccountDetail>();
@@ -239,7 +298,6 @@ namespace MvcDemand.Controllers
             NpoiWB = null; MS.Close(); MS.Dispose(); Response.Flush(); Response.End();
 
         }
-
-
+        
     }
 }

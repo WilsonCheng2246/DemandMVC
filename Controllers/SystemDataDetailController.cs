@@ -14,17 +14,47 @@ namespace MvcDemand.Controllers
 {
     public class SystemDataDetailController : Controller
     {
+
+        /* 函數名稱         :   SystemDataDetailController.cs
+         * 程式人員         :   Wilson Cheng
+         * 函數更新紀錄     :
+         *                      2018-11-20                  新建函數
+         *                      Index                       進入頁面時導入第一個函數 
+         *                      Detail                      系統參數明細從資料庫取得List
+         *                      Index   Post                重新導入第一個函數
+         *                      GetBindData                 取得系統參數清單取得List
+         *                      Create  Post                新增系統參數基本資料
+         *                      Update  Post                修改系統參數基本資料
+         *                      Delete  Post                刪除系統參數基本資料
+         *                      OutToExecl                  匯出系統參數基本資料
+         *                      Upload  Post                上傳系統參數基本資料
+         */
+
+        /// <summary>
+        /// 定義變數
+        /// </summary>
         SystemDataDetailModels sddModel = new SystemDataDetailModels();
         ClassDataBase dbClass = new ClassDataBase();
         public List<string> aryColumnName = new List<string>() { "SystemClass", "SystemValue", "SystemTitle", "SystemNotation", "SystemRemark", "SystemStatus" };
         public List<string> aryDeclareName = new List<string>() { "@SystemClass", "@SystemValue", "@SystemTitle", "@SystemNotation", "@SystemRemark", "@SystemStatus" };
 
+        /// <summary>
+        /// 函數名稱    :   Index
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
         public ActionResult Index(SystemDataDetailModels viewModel)
         {
             GetBindData("", "1", viewModel);
             return View(viewModel);
         }
 
+        /// <summary>
+        /// 函數名稱    :   Detail
+        /// </summary>
+        /// <param name="fSystemClass"></param>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
         public PartialViewResult Detail(string fSystemClass, SystemDataDetailModels viewModel)
         {
             List<oSystemDataDetail> deList = new List<oSystemDataDetail>(); deList = null;
@@ -33,6 +63,12 @@ namespace MvcDemand.Controllers
             return PartialView("Detail", viewModel);
         }
 
+        /// <summary>
+        /// 函數名稱    :   Index
+        /// </summary>
+        /// <param name="form"></param>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Index(FormCollection form, SystemDataDetailModels viewModel)
         {
@@ -40,6 +76,13 @@ namespace MvcDemand.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// 函數名稱    :   GetBindData
+        /// </summary>
+        /// <param name="fSearchValue"></param>
+        /// <param name="fPageIndex"></param>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
         public PartialViewResult GetBindData(string fSearchValue, string fPageIndex , SystemDataDetailModels viewModel) {
             List<oSystemDataDetail> dataList = new List<oSystemDataDetail>();
             dataList = sddModel.listObjSystemDataDetail().Where(x=>x.oSystemStatus == "D").ToList();            
@@ -60,6 +103,11 @@ namespace MvcDemand.Controllers
             return PartialView("List", viewModel);
         }
       
+        /// <summary>
+        /// 函數名稱    :   Create  Post
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
         [HttpPost]
         public RedirectResult Create(FormCollection form)
         {
@@ -72,6 +120,11 @@ namespace MvcDemand.Controllers
             return Redirect("~/SystemDataDetail/Index");
         }
 
+        /// <summary>
+        /// 函數名稱    :   Update  Post
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
         [HttpPost]
         public RedirectResult Update(FormCollection form)
         {
@@ -85,6 +138,12 @@ namespace MvcDemand.Controllers
             return Redirect("~/SystemDataDetail/Index");
         }
 
+        /// <summary>
+        /// 函數名稱    :   Delete
+        /// </summary>
+        /// <param name="vClass"></param>
+        /// <param name="vValue"></param>
+        /// <returns></returns>
         public RedirectResult Delete(string vClass, string vValue)
         {
             List<string> delaryDeclareName = new List<string>() { "@SystemClass", "@SystemValue" };
@@ -93,6 +152,9 @@ namespace MvcDemand.Controllers
             return Redirect("~/SystemDataDetail/Index");
         }
 
+        /// <summary>
+        /// 函數名稱    :   OutToExcel  Post
+        /// </summary>
         [HttpPost]
         public void OutToExecl()
         {
@@ -135,6 +197,11 @@ namespace MvcDemand.Controllers
 
         }
 
+        /// <summary>
+        /// 函數名稱    :   Upload      Post
+        /// </summary>
+        /// <param name="fileUpload"></param>
+        /// <returns></returns>
         [HttpPost]
         public RedirectResult Upload(HttpPostedFileBase fileUpload)
         {
