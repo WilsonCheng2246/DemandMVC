@@ -164,5 +164,35 @@ namespace MvcDemand.Controllers
             return returnValue;
         }
 
+        public ActionResult Sign(string fDemandIndex, DemandDetailModels viewModel)
+        {
+            List<oDemandDetail> dDemandDetail = new List<oDemandDetail>();
+            List<oDemandSchedule> dDemandSchedule = new List<oDemandSchedule>();
+            dDemandDetail = ddModel.objDemandDetailData();
+            dDemandDetail = dDemandDetail.Where(x => x.oDemandIndex == fDemandIndex).ToList();
+            if (dDemandDetail.Count > 0)
+            {
+                viewModel.vDemandTitle = dDemandDetail[0].oDemandTitle.ToString();
+                viewModel.vDemandNotation = HttpUtility.HtmlDecode(dDemandDetail[0].oDemandNotation);
+                viewModel.vDemandDate = string.Format(@"{0}/{1}/{2}", dDemandDetail[0].oDemandDate.Substring(0, 4), dDemandDetail[0].oDemandDate.Substring(4, 2), dDemandDetail[0].oDemandDate.Substring(6, 2));                
+            }
+            dDemandSchedule = ddModel.objDemandSchedule();
+            dDemandSchedule = dDemandSchedule.Where(x => x.oDemandIndex == fDemandIndex && x.oSchStatus == "X").OrderBy(x => x.oDemandStep).ToList();
+            if (dDemandSchedule.Count > 0)
+            {
+                viewModel.vDemandStep = dDemandSchedule[0].oDemandStep.ToString();
+                viewModel.vDemandStepTitle = sdModel.detailObjSystemDataDetail("DemandStep", viewModel.vDemandStep, "").ToList()[0].oSystemTitle;
+                viewModel.vSchAccIndex = dDemandSchedule[0].oSchAccIndex.ToString();
+            }
+            viewModel.vDemandIndex = fDemandIndex;
+            ViewBag.vDemandIndex = viewModel.vDemandIndex;
+            ViewBag.vDemandStep = viewModel.vDemandStep;
+            ViewBag.vDemandStepTitle = viewModel.vDemandStepTitle;
+            viewModel.selDemandScheduleStatus = sdModel.selObjSystemDataDetail("SchStatus", "請選擇", "");
+            ViewBag.selDemandScheduleStatus = viewModel.selDemandScheduleStatus;
+            viewModel.vSchAccName = adModel.listObjAccountDetail().Where(x => x.oAccIndex == viewModel.vSchAccIndex).ToList()[0].oAccName;
+            return View(viewModel);
+        }
+
     }
 }

@@ -19,6 +19,7 @@ namespace MvcDemand.Models
         public List<SelectListItem> selAccountDetailTop = new List<SelectListItem>();
         public List<SelectListItem> selAccountDetailMan = new List<SelectListItem>();
         public List<SelectListItem> selDemandClass = new List<SelectListItem>();
+        public List<SelectListItem> selDemandScheduleStatus = new List<SelectListItem>();
         
         public string vDemandIndex { get; set; }
         public string vDemandDate { get; set; }
@@ -52,6 +53,12 @@ namespace MvcDemand.Models
         public string vDemandTopName { get; set; }
         public string vDemandManNumber { get; set; }
         public string vDemandManName { get; set; }
+        public string vSchAccIndex { get; set; }
+        public string vSchAccName { get; set; }
+        public string vSchNotation { get; set; }
+        public string vSchDateTime { get; set; }
+        public string vSchStatus { get; set; }
+        public string vSchStatusTitle { get; set; }
         public string valPageIndex { get; set; }
         public string valPageCountSum { get; set; }
         public string valCountSum { get; set; }
@@ -87,13 +94,14 @@ namespace MvcDemand.Models
             Dictionary<string, object> funDicParas = new Dictionary<string,object>(); 
             DataTable rtnDT = new DataTable(); funQuerySQL = ""; funDicParas = null;
             try {
-                funQuerySQL = string.Format(@"Select dd.*, sda.systemtitle as DemandClassTitle 
+                funQuerySQL = string.Format(@"Select distinct dd.*, sda.systemtitle as DemandClassTitle 
                                 , sdb.SystemTitle as DemandStepTitle, sdc.systemtitle as DemandStatusTitle
                                 , isnull(ada.AccNo,'') as AccNumber, isnull(ada.AccName,'') as AccName
                                 , isnull(adb.AccNo,'') as AgentNumber, isnull(adb.accname,'') as AgentName
                                 , isnull(adc.AccNo,'') as TopNumber, isnull(adc.AccName,'') as TopName
                                 , isnull(ade.AccNo,'') as ManNumber, isnull(ade.AccName,'') as ManName
                                 from DemandDetail dd 
+                                inner join DemandSchedule ds on ds.DemandIndex = dd.DemandIndex
 	                            inner join SystemDataDetail sda on sda.SystemClass='DemandClass' and sda.SystemValue = dd.DemandClass
 	                            inner join SystemDataDetail sdb on sdb.SystemClass='DemandStep' and sdb.SystemValue= dd.DemandStep
 	                            inner join SystemDataDetail sdc on sdc.SystemClass='DemandStatus' and sdc.SystemValue=dd.DemandStatus
@@ -144,14 +152,31 @@ namespace MvcDemand.Models
             return list;
         }
 
-
-        /*
-        public List<oDemandDetail> objDemandDetailData()
+        public DataTable returnDataTableToDemandSchedule()
         {
-
-
+            Dictionary<string, object> funDicPara = new Dictionary<string, object>();
+            DataTable rtnDT = new DataTable(); funQuerySQL = ""; funDicPara = null;
+            funQuerySQL = "select * from DemandSchedule  where 1=1 ";
+            rtnDT = dbClass.msDataTableToDataBase(funQuerySQL, funDicPara);
+            return rtnDT;
         }
-        */
+
+        public List<oDemandSchedule> objDemandSchedule()
+        {
+            List<oDemandSchedule> list = new List<oDemandSchedule>();
+            DataTable dt = returnDataTableToDemandSchedule();
+            list = (from d in dt.AsEnumerable()
+                    select new oDemandSchedule
+                    {
+                        oDemandIndex = d.Field<string>("DemandIndex"),
+                        oDemandStep = d.Field<string>("DemandStep"),
+                        oSchAccIndex = d.Field<string>("SchAccIndex"),
+                        oSchDateTime = d.Field<string>("SchDateTime"),
+                        oSchNotation = d.Field<string>("SchNotation"),
+                        oSchStatus = d.Field<string>("SchStatus")
+                    }).ToList();
+            return list;
+        }
 
 
         public string returnDemandMaxIndex()

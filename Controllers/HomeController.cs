@@ -35,7 +35,7 @@ namespace MvcDemand.Controllers
         /// 函數名稱    :   Index
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index()
+        public ActionResult Index(HomeModels viewModel)
         {
             if (Session["AccIndex"] == null)
             {
@@ -43,8 +43,10 @@ namespace MvcDemand.Controllers
             } else {
                 List<oDemandDetail> objDemandDetail = new List<oDemandDetail>();
                 objDemandDetail = ddModel.objDemandDetailData();
-
-                return View();
+                objDemandDetail = objDemandDetail.Where(x=>x.oDemandAccIndex == Session["AccIndex"].ToString() && x.oDemandStatus == "X").ToList();
+                viewModel.homeListDemand = objDemandDetail;
+                ViewBag.homeListDemand = viewModel.homeListDemand;
+                return View(viewModel);
             }
             
         }
@@ -57,6 +59,8 @@ namespace MvcDemand.Controllers
         {
             return View();
         }
+
+        
 
         /// <summary>
         /// 函數名稱    :   LogOut

@@ -9,6 +9,7 @@ namespace MvcDemand.Models
     public class HomeModels
     {
 
+        public List<oDemandDetail> homeListDemand = new List<oDemandDetail>();
 
 
     }
