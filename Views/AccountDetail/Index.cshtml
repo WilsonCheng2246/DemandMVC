@@ -206,8 +206,9 @@
     @Html.Hidden("hideValueAccClass", (string)ViewBag.valArrayAccClass) 
     @Html.Hidden("hideValueAccDeptNo", (string)ViewBag.valArrayAccDeptNo)
     @Html.Hidden("hideValueJobNo", (string)ViewBag.valArrayAccJobNo) 
-    @Html.Hidden("hideSearchClass", "") 
-    @Html.Hidden("hideSearchDept", "") @Html.Hidden("hideSearchJob", "")
+    @Html.Hidden("hideSearchClass", (string)ViewBag.valSearchClass) 
+    @Html.Hidden("hideSearchDept", (string)ViewBag.valSearchDept) 
+    @Html.Hidden("hideSearchJob", (string)ViewBag.valSearchJob)
     
     <div id="showDataCreate" class="modal" style="display:none;text-align:center">
         <script type="text/javascript">
