@@ -90,7 +90,7 @@ namespace MvcDemand.Models
             funReturnValue = "";
             try {
                 List<oAccountRelation> liAccountRelation = new List<oAccountRelation>();
-                liAccountRelation = listAccountRelation().Where(x => x.oRelationClass == funRelationClass && x.oAccDeptNo == funAccDeptNo).ToList();
+                liAccountRelation = listAccountRelation().Where(x => x.oRelationClass == funRelationClass && x.oAccDeptNo == funAccDeptNo && x.oAccIndex != "00019").ToList();
                 if (liAccountRelation.Count > 0)
                 {
                     foreach (oAccountRelation item in liAccountRelation)

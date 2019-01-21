@@ -37,24 +37,25 @@ namespace MvcDemand.Controllers
         public ActionResult Index(AccountRelationModels viewModel)
         {
             viewModel.viewAccountRelation = arModel.listAccountRelation();            
-            viewModel.listAccountRelationA = viewModel.viewAccountRelation.Where(x => x.oRelationClass == "A").ToList();
+            viewModel.listAccountRelationA = viewModel.viewAccountRelation.Where(x => x.oRelationClass == "A" && x.oAccIndex != "00019").ToList();
             if (Session["AccJobNo"].ToString() != "K") { viewModel.listAccountRelationA = viewModel.listAccountRelationA.Where(x => x.oAccDeptNo == Session["AccDeptNo"].ToString()).ToList(); }
-            viewModel.listAccountRelationB = viewModel.viewAccountRelation.Where(x => x.oRelationClass == "B").ToList();
+            viewModel.listAccountRelationB = viewModel.viewAccountRelation.Where(x => x.oRelationClass == "B" && x.oAccIndex != "00019").ToList();
             if (Session["AccJobNo"].ToString() != "K") { viewModel.listAccountRelationB = viewModel.listAccountRelationB.Where(x => x.oAccDeptNo == Session["AccDeptNo"].ToString()).ToList(); }
-            viewModel.listAccountRelationC = viewModel.viewAccountRelation.Where(x => x.oRelationClass == "C").ToList();
+            viewModel.listAccountRelationC = viewModel.viewAccountRelation.Where(x => x.oRelationClass == "C" && x.oAccIndex != "00019").ToList();
             if (Session["AccJobNo"].ToString() != "K") { viewModel.listAccountRelationC = viewModel.listAccountRelationC.Where(x => x.oAccDeptNo == Session["AccDeptNo"].ToString()).ToList(); }
-            viewModel.listAccountRelationD = viewModel.viewAccountRelation.Where(x => x.oRelationClass == "D").ToList();
+            viewModel.listAccountRelationD = viewModel.viewAccountRelation.Where(x => x.oRelationClass == "D" && x.oAccIndex != "00019").ToList();
             if (Session["AccJobNo"].ToString() != "K") { viewModel.listAccountRelationD = viewModel.listAccountRelationD.Where(x => x.oAccDeptNo == Session["AccDeptNo"].ToString()).ToList(); }
-            viewModel.listAccountRelationE = viewModel.viewAccountRelation.Where(x => x.oRelationClass == "E").ToList();
+            viewModel.listAccountRelationE = viewModel.viewAccountRelation.Where(x => x.oRelationClass == "E" && x.oAccIndex != "00019").ToList();
             if (Session["AccJobNo"].ToString() != "K") { viewModel.listAccountRelationE = viewModel.listAccountRelationE.Where(x => x.oAccDeptNo == Session["AccDeptNo"].ToString()).ToList(); }
-            viewModel.listAccountRelationF = viewModel.viewAccountRelation.Where(x => x.oRelationClass == "F").ToList();
+            viewModel.listAccountRelationF = viewModel.viewAccountRelation.Where(x => x.oRelationClass == "F" && x.oAccIndex != "00019").ToList();
             if (Session["AccJobNo"].ToString() != "K") { viewModel.listAccountRelationF = viewModel.listAccountRelationF.Where(x => x.oAccDeptNo == Session["AccDeptNo"].ToString()).ToList(); }
-            viewModel.listAccountRelationG = viewModel.viewAccountRelation.Where(x => x.oRelationClass == "G").ToList();
+            viewModel.listAccountRelationG = viewModel.viewAccountRelation.Where(x => x.oRelationClass == "G" && x.oAccIndex != "00019").ToList();
             if (Session["AccJobNo"].ToString() != "K") { viewModel.listAccountRelationG = viewModel.listAccountRelationG.Where(x => x.oAccDeptNo == Session["AccDeptNo"].ToString()).ToList(); }
-            viewModel.listAccountRelationH = viewModel.viewAccountRelation.Where(x => x.oRelationClass == "H").ToList();
+            viewModel.listAccountRelationH = viewModel.viewAccountRelation.Where(x => x.oRelationClass == "H" && x.oAccIndex != "00019").ToList();
             if (Session["AccJobNo"].ToString() != "K") { viewModel.listAccountRelationH = viewModel.listAccountRelationH.Where(x => x.oAccDeptNo == Session["AccDeptNo"].ToString()).ToList(); }
             viewModel.listAccountDetail = adModel.listObjAccountDetail();
-            if (Session["AccJobNo"].ToString() != "K") { viewModel.listAccountDetail = viewModel.listAccountDetail.Where(x => x.oAccDeptNo == Session["AccDeptNo"].ToString()).ToList(); }            
+            viewModel.listAccountDetail = viewModel.listAccountDetail.Where(x => x.oAccIndex != "0019").ToList();            
+            if (Session["AccJobNo"].ToString() != "K") { viewModel.listAccountDetail = viewModel.listAccountDetail.Where(x => x.oAccDeptNo == Session["AccDeptNo"].ToString() && x.oAccIndex != "00019").ToList(); }            
             string valAccountData = ""; string valAccountDeptData = "";
             foreach (oAccountDetail item in viewModel.listAccountDetail) { 
                 valAccountData += item.oAccIndex.ToString() + "_";

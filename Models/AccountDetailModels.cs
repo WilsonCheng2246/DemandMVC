@@ -79,7 +79,7 @@ namespace MvcDemand.Models
 
         public List<oAccountDetail> listObjAccountDetail() {            
             funDataTable = new DataTable(); funDataTable = returnDataTable();
-            var rtnList = (from dt in funDataTable.AsEnumerable()
+            var rtnList = (from dt in funDataTable.AsEnumerable()                           
                        select new oAccountDetail {
                            oAccIndex = dt.Field<string>("AccIndex").ToString(),
                            oAccNo = dt.Field<string>("AccNo").ToString(),
