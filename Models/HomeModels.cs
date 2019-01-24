@@ -10,6 +10,7 @@ namespace MvcDemand.Models
     {
 
         public List<oDemandDetail> homeListDemand = new List<oDemandDetail>();
+        public List<oDemandDetailAndSchedule> homeListDemandSchedule = new List<oDemandDetailAndSchedule>();
 
 
     }

@@ -34,17 +34,19 @@
             <td style="width:300px; text-align:left">(@Model.vDemandStep) @ViewBag.vDemandStepTitle</td>
         </tr>
         <tr style="height:35px">
-            <td style="width:200px; text-align:center; background-color:#5F9EA0; color:white;font-weight:bold">需求單標題</td>
-            <td style="width:300px; text-align:left">@Model.vDemandTitle</td>
-            <td style="width:200px; text-align:center; background-color:#5F9EA0; color:white;font-weight:bold">需求單內容</td>
-            <td style="width:300px; text-align:left">@Html.Raw(Model.vDemandNotation)</td>
-        </tr>
-        <tr style="height:35px">
             <td style="width:200px; text-align:center; background-color:#5F9EA0; color:white;font-weight:bold">申請日期</td>
             <td style="width:300px; text-align:left">@Model.vDemandDate</td>
             <td style="width:200px; text-align:center; background-color:#5F9EA0; color:white;font-weight:bold">申請帳號</td>
             <td style="width:300px; text-align:left">(@Model.vSchAccIndex)  @Model.vSchAccName</td>
         </tr>
+        <tr style="height:35px">
+            <td style="width:200px; text-align:center; background-color:#5F9EA0; color:white;font-weight:bold">需求單標題</td>
+            <td style="width:700px; text-align:left" colspan="3">@Model.vDemandTitle</td>
+        </tr>
+        <tr style="height:35px">
+            <td style="width:200px; text-align:center; background-color:#5F9EA0; color:white;font-weight:bold">需求單內容</td>
+            <td style="width:700px; text-align:left" colspan="3">@Html.Raw(Model.vDemandNotation)</td>
+        </tr>        
         <tr style="height:35px">
             <td style="width:200px; text-align:center; background-color:#5F9EA0; color:white;font-weight:bold">簽核狀態</td>
             <td style="width:300px; text-align:left">@Html.DropDownList("selSchStatus", (IEnumerable<SelectListItem>)ViewBag.selDemandScheduleStatus, new { Style = "width:60%; height:30px" })

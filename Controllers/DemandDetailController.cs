@@ -40,8 +40,53 @@ namespace MvcDemand.Controllers
             viewModel.objDemandDetail = ddModel.objDemandDetailData();
             ViewBag.objDemandDetail = ddModel.objDemandDetailData();
             ViewBag.valCountSum = viewModel.objDemandDetailData().Count().ToString();
+            List<oAccountRelation> listR = new List<oAccountRelation>();
+            listR = arModel.listAccountRelation();
+            viewModel.selAccountRelatClassH = (from liR in listR.AsQueryable() where liR.oRelationClass == "H" && liR.oAccDeptNo == "B01"
+                                               select new SelectListItem { 
+                                                   Value = liR.oAccIndex.ToString(),
+                                                   Text = string.Format(@"({0}){1}", liR.oAccNo.ToString(), liR.oAccName.ToString())
+                                               }).ToList();
+            viewModel.selAccountRelatClassI = (from liR in listR.AsQueryable() where liR.oRelationClass == "F" && liR.oAccDeptNo == "B01"
+                                               select new SelectListItem {
+                                                   Value = liR.oAccIndex.ToString(),
+                                                   Text = string.Format(@"({0}){1}", liR.oAccNo.ToString(), liR.oAccName.ToString())
+                                               }).ToList();
 
+            viewModel.selAccountRelatClassJ = (from liR in listR.AsQueryable() where liR.oRelationClass == "G" && liR.oAccDeptNo == "B01"
+                                               select new SelectListItem {
+                                                   Value = liR.oAccIndex.ToString(),
+                                                   Text = string.Format(@"({0}){1}", liR.oAccNo.ToString(), liR.oAccName.ToString())
+                                               }).ToList();
+            ViewBag.selAccountRelatClassH = viewModel.selAccountRelatClassH;
+            ViewBag.selAccountRelatClassI = viewModel.selAccountRelatClassI;
+            ViewBag.selAccountRelatClassJ = viewModel.selAccountRelatClassJ;
             return View(viewModel);
+        }
+
+        [HttpPost]
+        public RedirectResult DataListSetup(FormCollection form)
+        {
+            string valDemandIndex = form["hideDemandIndexDC"].ToString();
+            string valAccIndexH = form["selListH"].ToString();
+            string valAccIndexE = form["selListI"].ToString();
+            string valAccIndexF = form["selListJ"].ToString();
+            List<string> listSchDeclare = new List<string>() { "@DemandIndex", "@DemandStep", "@SchAccIndex", "@SchNotation", "@SchDateTime", "@SchStatus" };
+            List<object> listSchValue = new List<object>(); string ExecSchValue = "";
+            listSchValue = new List<object>() { valDemandIndex, "G", valAccIndexH, "", dbClass.ReturnDetailToNowDateTime("VF"), "X" };
+            ExecSchValue = dbClass.msExecuteDataBase("N", "DemandSchedule", 0, listSchDeclare, listSchValue);
+            listSchValue = new List<object>() { valDemandIndex, "H", valAccIndexH, "", dbClass.ReturnDetailToNowDateTime("VF"), "X" };
+            ExecSchValue = dbClass.msExecuteDataBase("N", "DemandSchedule", 0, listSchDeclare, listSchValue);
+            listSchValue = new List<object>() { valDemandIndex, "M", valAccIndexH, "", dbClass.ReturnDetailToNowDateTime("VF"), "X" };
+            ExecSchValue = dbClass.msExecuteDataBase("N", "DemandSchedule", 0, listSchDeclare, listSchValue);
+            listSchValue = new List<object>() { valDemandIndex, "N", valAccIndexE, "", dbClass.ReturnDetailToNowDateTime("VF"), "X" };
+            ExecSchValue = dbClass.msExecuteDataBase("N", "DemandSchedule", 0, listSchDeclare, listSchValue);
+            listSchValue = new List<object>() { valDemandIndex, "O", valAccIndexF, "", dbClass.ReturnDetailToNowDateTime("VF"), "X" };
+            ExecSchValue = dbClass.msExecuteDataBase("N", "DemandSchedule", 0, listSchDeclare, listSchValue);
+            listSchValue = new List<object>() { valDemandIndex, "P", valAccIndexF, "", dbClass.ReturnDetailToNowDateTime("VF"), "X" };
+            ExecSchValue = dbClass.msExecuteDataBase("N", "DemandSchedule", 0, listSchDeclare, listSchValue);
+            return Redirect("~/DemandDetail/Index");
+
         }
 
         /// <summary>
@@ -53,13 +98,31 @@ namespace MvcDemand.Controllers
         {
             viewModel.selDemandClass = sdModel.selObjSystemDataDetail("DemandClass", "請選擇", "");
             ViewBag.selDemandClass = viewModel.selDemandClass;
-            viewModel.selAccountDetail = ddModel.returnSelectAccountData("", "A");
+            viewModel.selAccountDetail = ddModel.returnSelectAccountData((Session["AccJobNo"].ToString() != "K") ? Session["AccDeptNo"].ToString() : "" , "A");            
             ViewBag.selAccountDetail = viewModel.selAccountDetail;
-            viewModel.selAccountDetailAgent = sdModel.selObjSystemDataDetail("", "請選擇", "");
+            if (Session["AccJobNo"].ToString() == "K") {
+                viewModel.selAccountDetailAgent = sdModel.selObjSystemDataDetail("", "請選擇", "");
+            } else {
+                viewModel.selAccountDetailAgent = ddModel.returnSelectAccountData((Session["AccJobNo"].ToString() != "K") ? Session["AccDeptNo"].ToString() : "", "B");
+            }            
             ViewBag.selAccountDetailAgent = viewModel.selAccountDetailAgent;
-            viewModel.selAccountDetailTop = sdModel.selObjSystemDataDetail("", "請選擇", "");
+            if (Session["AccJobNo"].ToString() == "K")
+            {
+                viewModel.selAccountDetailTop = sdModel.selObjSystemDataDetail("", "請選擇", "");
+            }
+            else
+            {
+                viewModel.selAccountDetailTop = ddModel.returnSelectAccountData((Session["AccJobNo"].ToString() != "K") ? Session["AccDeptNo"].ToString() : "", "C");
+            }            
             ViewBag.selAccountDetailTop = viewModel.selAccountDetailTop;
-            viewModel.selAccountDetailMan = sdModel.selObjSystemDataDetail("", "請選擇", "");
+            if (Session["AccJobNo"].ToString() == "K")
+            {
+                viewModel.selAccountDetailMan = sdModel.selObjSystemDataDetail("", "請選擇", "");
+            }
+            else
+            {
+                viewModel.selAccountDetailMan = ddModel.returnSelectAccountData((Session["AccJobNo"].ToString() != "K") ? Session["AccDeptNo"].ToString() : "", "E");
+            }            
             ViewBag.selAccountDetailMan = viewModel.selAccountDetailMan;
             return View(viewModel);
         }
@@ -84,7 +147,6 @@ namespace MvcDemand.Controllers
                 , form["hideDemandUpload"], "A", form["textDemandFrom"], form["textDemandProject"], form["textDemandDateS"]
                 , "", form["textDemandDateH"], HttpUtility.HtmlEncode(form["textDemandNotation"]), HttpUtility.HtmlEncode(form["textDemandRemark"]), "X"
                 , form["hideDemandAccIndex"].Replace(',',' ').Trim(), form["hideDemandAgentIndex"], form["hideDemandTopIndex"], form["hideDemandManIndex"], dbClass.ReturnDetailToNowDateTime("VF"), ""};            
-            
             string fExecuteValue = dbClass.msExecuteDataBase("N", "DemandDetail", 0, aryDeclare, aryValue);
             string DemandStepST = (form["hideDemandUpload"] == "O") ? "X" : "O";
             List<object> listSchValue = new List<object>(); string fExecSchValue = "";
@@ -94,7 +156,7 @@ namespace MvcDemand.Controllers
             }            
             if (form["hideDemandAgentIndex"] != "")
             {
-                listSchValue = new List<object>() { funMaxDemandIndex, "A", form["hideDemandAgentIndex"].Replace(',', ' ').Trim(), "", dbClass.ReturnDetailToNowDateTime("VF"), DemandStepST };
+                listSchValue = new List<object>() { funMaxDemandIndex, "B", form["hideDemandAgentIndex"].Replace(',', ' ').Trim(), "", dbClass.ReturnDetailToNowDateTime("VF"), "X" };
                 fExecSchValue = dbClass.msExecuteDataBase("N", "DemandSchedule", 0, listSchDeclare, listSchValue);
             }
             if (form["hideDemandTopIndex"] != "")
@@ -109,9 +171,9 @@ namespace MvcDemand.Controllers
             }
             if (form["hideDemandUpload"] == "O")
             {
-                return Redirect("~/DemandDetail/Index");            
+                return Redirect("~/DemandDetail/Upload?fDemandIndex=" + funMaxDemandIndex);
             } else {
-                return Redirect("~/DemandDetail/Upload?fDemandIndex=" + funMaxDemandIndex);            
+                return Redirect("~/DemandDetail/Index");
             }
             
         }
@@ -177,7 +239,7 @@ namespace MvcDemand.Controllers
                 viewModel.vDemandDate = string.Format(@"{0}/{1}/{2}", dDemandDetail[0].oDemandDate.Substring(0, 4), dDemandDetail[0].oDemandDate.Substring(4, 2), dDemandDetail[0].oDemandDate.Substring(6, 2));                
             }
             dDemandSchedule = ddModel.listDemandSchedule();
-            dDemandSchedule = dDemandSchedule.Where(x => x.oDemandIndex == fDemandIndex && x.oSchStatus == "X").OrderBy(x => x.oDemandStep).ToList();
+            dDemandSchedule = dDemandSchedule.Where(x => x.oDemandIndex == fDemandIndex && x.oSchAccIndex == Session["AccIndex"].ToString() && x.oSchStatus == "X").OrderBy(x => x.oDemandStep).ToList();
             if (dDemandSchedule.Count > 0)
             {
                 viewModel.vDemandStep = dDemandSchedule[0].oDemandStep.ToString();
@@ -203,11 +265,26 @@ namespace MvcDemand.Controllers
             fDemandStep = form["hideDemandStep"].ToString();
             fSchAccIndex = form["hideSchAccIndex"].ToString();
             fSchNotation = HttpUtility.HtmlEncode(form["textSchNotation"]);
-            fSchStatus = form["hideSchStatus"];            
+            fSchStatus = form["hideSchStatus"];                        
             List<string> listSchDeclare = new List<string>() { "@DemandIndex", "@DemandStep", "@SchAccIndex", "@SchNotation", "@SchDateTime", "@SchStatus" };
             List<object> listSchValue = new List<object>() { fDemandIndex, fDemandStep, fSchAccIndex, fSchNotation, dbClass.ReturnDetailToNowDateTime("VF"), fSchStatus  };
             string fExecuteValue = dbClass.msExecuteDataBase("U", "DemandSchedule", 3, listSchDeclare, listSchValue);
-            return Redirect("~/DemandDetail/Schedule");
+            List<string> listDemDeclare = new List<string>() { "@DemandIndex", "@DemandStep" };
+            List<object> listDemValue = new List<object>() { fDemandIndex, fDemandStep };
+            string fExecDeM = dbClass.msExecuteDataBase("U", "DemandDetail", 1, listDemDeclare, listDemValue);
+            if (fDemandStep == "D")
+            {
+                string fitManIndex = arModel.listAccountRelation().Where(x => x.oRelationClass == "D" && x.oAccDeptNo == "B01").ToList()[0].oAccIndex.ToString();
+                listSchValue = new List<object>() { fDemandIndex, "E", fitManIndex, "", dbClass.ReturnDetailToNowDateTime("VF"), "X" };
+                string fExecSchValue = dbClass.msExecuteDataBase("N", "DemandSchedule", 0, listSchDeclare, listSchValue);
+            }
+            if (fDemandStep == "E")
+            {
+                string fitManIndex = arModel.listAccountRelation().Where(x => x.oRelationClass == "D" && x.oAccDeptNo == "B01").ToList()[0].oAccIndex.ToString();
+                listSchValue = new List<object>() { fDemandIndex, "F", fitManIndex, "", dbClass.ReturnDetailToNowDateTime("VF"), "O" };
+                string fExecSchValue = dbClass.msExecuteDataBase("N", "DemandSchedule", 0, listSchDeclare, listSchValue);
+            }
+            return Redirect("~/DemandDetail/Index");
 
         }
 
@@ -220,6 +297,16 @@ namespace MvcDemand.Controllers
             ViewBag.objDemandSchedule = viewModel.objDemandSchedule;
             return View(viewModel);
         }
+
+        public JsonResult jSonSchedule(string fDemandIndex)
+        {
+            List<oDemandSchedule> listSch = new List<oDemandSchedule>();
+            listSch = ddModel.listDemandSchedule();
+            listSch = listSch.Where(x => x.oDemandIndex == fDemandIndex).ToList();
+            return Json(listSch);
+        }
+
+
 
     }
 }

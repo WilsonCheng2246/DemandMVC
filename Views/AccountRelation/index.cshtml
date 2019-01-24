@@ -257,8 +257,7 @@
                 <td style="width:125px; text-align:left" colspan="2">@Session["AccNo"].ToString() @Session["AccName"].ToString() </td>
                 <td style="width:250px; text-align:right" colspan="2">@if (Session["AccJobNo"].ToString() == "K") { @Html.Raw("單位清單"); }</td>
                 <td style="width:250px; text-align:left" colspan="2">
-                @if (Session["AccJobNo"].ToString() == "K")
-                {
+                @if (Session["AccJobNo"].ToString() == "K") {
                     @Html.DropDownList("sAccDeptNo", (IEnumerable<SelectListItem>)Model.selAccDeptNo, new { Style = "width:90%; height:30px" })
                 }
                 </td>

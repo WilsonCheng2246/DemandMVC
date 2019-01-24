@@ -23,6 +23,10 @@ namespace MvcDemand.Models
         public List<SelectListItem> selDemandClass = new List<SelectListItem>();
         public List<SelectListItem> selDemandScheduleStatus = new List<SelectListItem>();
         public List<oDemandSchedule> objDemandSchedule = new List<oDemandSchedule>();
+        public List<SelectListItem> selAccountRelatClassH = new List<SelectListItem>();
+        public List<SelectListItem> selAccountRelatClassI = new List<SelectListItem>();
+        public List<SelectListItem> selAccountRelatClassJ = new List<SelectListItem>();
+
         
         public string vDemandIndex { get; set; }
         public string vDemandDate { get; set; }
@@ -180,8 +184,6 @@ namespace MvcDemand.Models
                         oSchAccIndex = d.Field<string>("SchAccIndex"),
                         oSchAccNo = d.Field<string>("AccNo"),
                         oSchAccName = d.Field<string>("AccName"),
-                        //oSchAccNo = adModel.listObjAccountDetail().Where(x=>x.oAccIndex == d.Field<string>("SchAccIndex")).ToList()[0].oAccNo,
-                        //oSchAccName = adModel.listObjAccountDetail().Where(x=>x.oAccIndex == d.Field<string>("SchAccIndex")).ToList()[0].oAccName,
                         oSchDateTime = d.Field<string>("SchDateTime"),
                         oSchNotation = d.Field<string>("SchNotation"),
                         oSchStatus = d.Field<string>("SchStatus")
@@ -189,6 +191,76 @@ namespace MvcDemand.Models
             return list;
         }
 
+        public DataTable rtnDataTableToDemandSchedule()
+        {
+            Dictionary<string, object> funDicPara = new Dictionary<string, object>();
+            DataTable rtnDT = new DataTable(); funQuerySQL = ""; funDicPara = null;
+            funQuerySQL = string.Format(@"
+                    Select distinct ds.*, dd.*, sda.systemtitle as DemandClassTitle 
+                                , sdb.SystemTitle as DemandStepTitle, sdc.systemtitle as DemandStatusTitle
+                                , isnull(ada.AccNo,'') as AccNumber, isnull(ada.AccName,'') as AccName
+                                , isnull(adb.AccNo,'') as AgentNumber, isnull(adb.accname,'') as AgentName
+                                , isnull(adc.AccNo,'') as TopNumber, isnull(adc.AccName,'') as TopName
+                                , isnull(ade.AccNo,'') as ManNumber, isnull(ade.AccName,'') as ManName
+                                from DemandSchedule ds
+                                left join DemandDetail dd on ds.DemandIndex = dd.DemandIndex
+	                            inner join SystemDataDetail sda on sda.SystemClass='DemandClass' and sda.SystemValue = dd.DemandClass
+	                            inner join SystemDataDetail sdb on sdb.SystemClass='DemandStep' and sdb.SystemValue= dd.DemandStep
+	                            inner join SystemDataDetail sdc on sdc.SystemClass='DemandStatus' and sdc.SystemValue=dd.DemandStatus
+	                            left join AccountDetail ada on ada.AccIndex=dd.DemandAccIndex 
+	                            left join AccountDetail adb on adb.AccIndex = dd.DemandAgentIndex
+	                            left join AccountDetail adc on adc.AccIndex = dd.DemandTopIndex
+	                            left join AccountDetail ade on ade.AccIndex = dd.DemandManIndex
+                    ");
+            rtnDT = dbClass.msDataTableToDataBase(funQuerySQL, funDicPara);
+            return rtnDT;
+        }
+
+        public List<oDemandDetailAndSchedule> listDemandDetailAndSchedule()
+        {
+            List<oDemandDetailAndSchedule> list = new List<oDemandDetailAndSchedule>();
+            DataTable rtnDT = new DataTable();
+            rtnDT = rtnDataTableToDemandSchedule();
+            list = (from dt in rtnDT.AsEnumerable()
+                    select new oDemandDetailAndSchedule
+                    {
+                        oDemandIndex = dt.Field<string>("DemandIndex"),
+                        oDemandDate = dt.Field<string>("DemandDate"),
+                        oDemandTitle = dt.Field<string>("DemandTitle"),
+                        oDemandClass = dt.Field<string>("DemandClass"),
+                        oDemandTest = dt.Field<string>("DemandTest"),
+                        oDemandUpload = dt.Field<string>("DemandUpload"),
+                        oDemandStep = dt.Field<string>("DemandStep"),
+                        oDemandFrom = dt.Field<string>("DemandFrom"),
+                        oDemandProject = dt.Field<string>("DemandProject"),
+                        oDemandDateS = dt.Field<string>("DemandDateS"),
+                        oDemandDateE = dt.Field<string>("DemandDateE"),
+                        oDemandDateH = dt.Field<string>("DemandDateH"),
+                        oDemandNotation = dt.Field<string>("DemandNotation"),
+                        oDemandRemark = dt.Field<string>("DemandRemark"),
+                        oDemandStatus = dt.Field<string>("DemandStatus"),
+                        oDemandAccIndex = dt.Field<string>("DemandAccIndex"),
+                        oDemandAgentIndex = dt.Field<string>("DemandAgentIndex"),
+                        oDemandTopIndex = dt.Field<string>("DemandTopIndex"),
+                        oDemandManIndex = dt.Field<string>("DemandManIndex"),
+                        oDemandClassTitle = dt.Field<string>("DemandClassTitle"),
+                        oDemandStepTitle = dt.Field<string>("DemandStepTitle"),
+                        oDemandStatusTitle = dt.Field<string>("DemandStatusTitle"),
+                        oDemandAccNumber = dt.Field<string>("AccNumber"),
+                        oDemandAccNumberName = dt.Field<string>("AccName"),
+                        oDemandAgentNumber = dt.Field<string>("AgentNumber"),
+                        oDemandAgentName = dt.Field<string>("AgentName"),
+                        oDemandTopNumber = dt.Field<string>("TopNumber"),
+                        oDemandTopName = dt.Field<string>("TopName"),
+                        oDemandManNumber = dt.Field<string>("ManNumber"),
+                        oDemandManName = dt.Field<string>("ManName"),
+                        oSchAccIndex = dt.Field<string>("SchAccIndex"),
+                        oSchNotation = dt.Field<string>("SchNotation"),
+                        oSchDateTime = dt.Field<string>("SchDateTime"),
+                        oSchStatus = dt.Field<string>("SchStatus")
+                    }).ToList();
+            return list;
+        }
 
         public string returnDemandMaxIndex()
         {
@@ -202,8 +274,14 @@ namespace MvcDemand.Models
                 rtnDT = dbClass.msDataTableToDataBase(funQuerySQL, dicPara);
                 if (rtnDT.Rows.Count > 0)
                 {
-                    funMaxIndex = rtnDT.Rows[0]["MaxIndex"].ToString();
-                    funMaxIndex = nowMonth + Convert.ToInt32(Convert.ToInt32(funMaxIndex.Substring(6, 4)) + 1).ToString().PadLeft(4, '0').ToString();
+                    if (rtnDT.Rows[0]["MaxIndex"].ToString() != "")
+                    {
+                        funMaxIndex = rtnDT.Rows[0]["MaxIndex"].ToString();
+                        funMaxIndex = nowMonth + Convert.ToInt32(Convert.ToInt32(funMaxIndex.Substring(6, 4)) + 1).ToString().PadLeft(4, '0').ToString();
+                    } else
+                    {
+                        funMaxIndex = nowMonth + "0001";
+                    }                    
                 } else {
                     funMaxIndex = nowMonth+ "0001";
                 }
@@ -217,8 +295,7 @@ namespace MvcDemand.Models
         }
 
     }
-
-
+    
     public class oDemandDetail
     {
         public string oDemandIndex { get; set; }
@@ -263,6 +340,44 @@ namespace MvcDemand.Models
         public string oSchAccIndex { get; set; }
         public string oSchAccNo { get; set; }
         public string oSchAccName { get; set; }
+        public string oSchNotation { get; set; }
+        public string oSchDateTime { get; set; }
+        public string oSchStatus { get; set; }
+    }
+
+    public class oDemandDetailAndSchedule
+    {
+        public string oDemandIndex { get; set; }
+        public string oDemandDate { get; set; }
+        public string oDemandTitle { get; set; }
+        public string oDemandClass { get; set; }
+        public string oDemandTest { get; set; }
+        public string oDemandUpload { get; set; }
+        public string oDemandStep { get; set; }
+        public string oDemandFrom { get; set; }
+        public string oDemandProject { get; set; }
+        public string oDemandDateS { get; set; }
+        public string oDemandDateE { get; set; }
+        public string oDemandDateH { get; set; }
+        public string oDemandNotation { get; set; }
+        public string oDemandRemark { get; set; }
+        public string oDemandStatus { get; set; }
+        public string oDemandAccIndex { get; set; }
+        public string oDemandAgentIndex { get; set; }
+        public string oDemandTopIndex { get; set; }
+        public string oDemandManIndex { get; set; }
+        public string oDemandClassTitle { get; set; }
+        public string oDemandStepTitle { get; set; }
+        public string oDemandStatusTitle { get; set; }
+        public string oDemandAccNumber { get; set; }
+        public string oDemandAccNumberName { get; set; }
+        public string oDemandAgentNumber { get; set; }
+        public string oDemandAgentName { get; set; }
+        public string oDemandTopNumber { get; set; }
+        public string oDemandTopName { get; set; }
+        public string oDemandManNumber { get; set; }
+        public string oDemandManName { get; set; }
+        public string oSchAccIndex { get; set; }
         public string oSchNotation { get; set; }
         public string oSchDateTime { get; set; }
         public string oSchStatus { get; set; }

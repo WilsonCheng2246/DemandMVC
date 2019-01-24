@@ -41,12 +41,12 @@ namespace MvcDemand.Controllers
             {
                 return Redirect("~/Home/Login");
             } else {
-                List<oDemandDetail> objDemandDetail = new List<oDemandDetail>();
-                objDemandDetail = ddModel.objDemandDetailData();
-                objDemandDetail = objDemandDetail.Where(x=>x.oDemandAccIndex == Session["AccIndex"].ToString() && x.oDemandStatus == "X").ToList();
-                viewModel.homeListDemand = objDemandDetail;
-                ViewBag.homeListDemand = viewModel.homeListDemand;
-                return View(viewModel);
+                List<oDemandDetailAndSchedule> objDemandDetailAndSchedule = new List<oDemandDetailAndSchedule>();
+                objDemandDetailAndSchedule = ddModel.listDemandDetailAndSchedule();
+                objDemandDetailAndSchedule = objDemandDetailAndSchedule.Where(x => x.oSchAccIndex == Session["AccIndex"].ToString() && x.oSchStatus == "X").ToList();
+                viewModel.homeListDemandSchedule = objDemandDetailAndSchedule;
+                ViewBag.homeListDemandSchedule = viewModel.homeListDemandSchedule;
+                return View(viewModel);                
             }
             
         }

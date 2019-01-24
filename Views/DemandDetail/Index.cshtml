@@ -5,6 +5,35 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     MvcDemand.ClassDataBase dbClass = new MvcDemand.ClassDataBase();
 }
+<style>
+    .modalD {
+        text-align: center;
+        position: fixed;
+        z-index: 1;
+        top: 5%;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        font-size: 100%;
+        background-color: rgba(0,0,0,0.6) !important;
+    }
+
+    .modal_bodyD {
+        text-align: center;
+        position: absolute;
+        background-color: #F6F6F6;
+        /*background-color: white;*/
+        /*width:90%;*/
+        /*width: 870px;*/
+        top: 10%;
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        border-style: solid;
+        border-color: #2E6E9E;
+    }
+</style>
 <script type="text/javascript">
 
     var baseURL = '@Html.Raw(Url.Content("~"))';
@@ -27,45 +56,88 @@
         return false;
     }
 
+    funcShowSchedule = function (strDemandIndex) {
+        var funURL = baseURL + "/DemandDetail/jSonSchedule";
+        var objData = { fDemandIndex: strDemandIndex };
+        var rtnValue = "";
+        $.ajax({
+            url: funURL,
+            type: 'Post',
+            data: objData,
+            async: false,
+            dataType: 'json',
+            success: function (response) {
+                rtnValue = response;
+            },
+            error: function (error, ajaxOption, thrownErrors) {
+                rtnValue = error.responseText;
+            }
+        });
+        var strTable = "";
+        if (rtnValue != "") {            
+            rtnValue = JSON.parse(JSON.stringify(rtnValue));
+            strTable = "<tr><td colspan='7'><hr /></td></tr>";
+            for (var i = 0; i < rtnValue.length; i++) {
+                var row = "<tr style='height:30px'>";
+                row += "<td style='width:100px'>&nbsp;</td>";
+                row += "<td style='width:200px; text-align:left'>(" + rtnValue[i].oDemandStep + ")" + rtnValue[i].oDemandStepTitle + "</td>";
+                row += "<td style='width:150px; text-align:left'>(" + rtnValue[i].oSchAccNo + ")" + rtnValue[i].oSchAccName + "</td>";
+                row += "<td style='width:100px; text-align:center'>" + rtnValue[i].oSchDateTime.substring(8, 0) + "</td>";
+                row += "<td style='width:200px; text-align:left'>" + $('<div/>').html(rtnValue[i].oSchNotation).text() + "</td>";
+                row += "<td style='width:50px; text-align:center'>" + rtnValue[i].oSchStatus + "</td>";
+                row += "<td style='width:100px; text-align:left'></td>";
+                row += "</tr>";
+                strTable += row;
+            }
+        }
+        $('#sSch_' + strDemandIndex + '').html(strTable);
+        return false;
+    }
+
+    funDataSetup = function (strValue) {
+        $('#hideDemandIndexDC').val(strValue);
+        $('#sDataCreate').fadeIn("slow");        
+    }
+
 </script>
 @using (Html.BeginForm("", "", FormMethod.Post, new { id = "form1" }))
 {
     int countTop = 0;
     int countDown = Convert.ToInt32(ViewBag.valCountSum);
-
-    <table style="width:100%" border="0" cellpadding="0" cellspacing="0">
-        <tr style="height:40px; font-size:20px; font-weight:bold"><td style="width:100%; text-align:center" colspan="11">需求申請單明細<hr /></td></tr>
-        <tr style="height:35px;">
-            <td style="width:700px; text-align:left" colspan="9">
-                關鍵字 : @Html.TextBox("searchValue", (string)ViewBag.searchValue, new { Style = "width:600px; height:35px" })
-                <input type="submit" id="btnsubmit" value="查詢" style="width:100px; height:30px;font-weight:bold;font-size:18px" />
-            </td>
-            <td style="width:200px; text-align:right" colspan="2">
-                <select id="dropExecute" name="dropExecute" style="width:200px; height:30px;font-size:16px;font-weight:bold">
-                    <option value="">請選擇</option>
-                    <option value="N">新增需求申請單</option>
-                </select>
-            </td>
-        </tr>
-        <tr style="height:35px; color:white;font-size:18px; background-color:blue; text-align:center">
-            <td style="width:100px;">序號</td>
-            <td style="width:100px">申請日期</td>
-            <td style="width:100px">類別</td>
-            <td style="width:100px">進度</td>
-            <td style="width:100px">狀態</td>
-            <td style="width:50px">測試</td>
-            <td style="width:50px">檔案</td>
-            <td style="width:100px">申請日期</td>
-            <td style="width:100px">申請帳號</td>
-            <td style="width:50px">明細</td>
-            <td style="width:50px">流程單</td>
-        </tr>
-        <tr><td style="width:100%" colspan="11"><hr /></td></tr>
+    <div id="showList">
+        <table style="width:100%" border="0" cellpadding="0" cellspacing="0">
+            <tr style="height:40px; font-size:20px; font-weight:bold"><td style="width:100%; text-align:center" colspan="11">需求申請單明細<hr /></td></tr>
+            <tr style="height:35px;">
+                <td style="width:700px; text-align:left" colspan="9">
+                    關鍵字 : @Html.TextBox("searchValue", (string)ViewBag.searchValue, new { Style = "width:600px; height:35px" })
+                    <input type="submit" id="btnsubmit" value="查詢" style="width:100px; height:30px;font-weight:bold;font-size:18px" />
+                </td>
+                <td style="width:200px; text-align:right" colspan="2">
+                    <select id="dropExecute" name="dropExecute" style="width:200px; height:30px;font-size:16px;font-weight:bold">
+                        <option value="">請選擇</option>
+                        <option value="N">新增需求申請單</option>
+                    </select>
+                </td>
+            </tr>
+            <tr style="height:35px; color:white;font-size:18px; background-color:blue; text-align:center">
+                <td style="width:100px;">序號</td>
+                <td style="width:100px">申請日期</td>
+                <td style="width:100px">類別</td>
+                <td style="width:100px">進度</td>
+                <td style="width:100px">狀態</td>
+                <td style="width:50px">測試</td>
+                <td style="width:50px">檔案</td>
+                <td style="width:100px">申請日期</td>
+                <td style="width:100px">申請帳號</td>
+                <td style="width:50px">明細</td>
+                <td style="width:50px">流程單</td>
+            </tr>
+            <tr><td style="width:100%" colspan="11"><hr /></td></tr>
             @for (int i = countTop; i < countDown; i++)
             {
                 <tr style="height:30px">
                     <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandIndex.ToString()</td>
-                    <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandDate.ToString().Substring(0,8)</td>
+                    <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandDate.ToString().Substring(0, 8)</td>
                     <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandClassTitle.ToString()</td>
                     <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandStepTitle.ToString()</td>
                     <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandStatusTitle.ToString()</td>
@@ -74,9 +146,49 @@
                     <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandDateS.ToString()</td>
                     <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandAccNumberName.ToString()</td>
                     <td style="width:50px; text-align:center">明細</td>
-                    <td style="width:50px; text-align:center">流程</td>
+                    <td style="width:50px; text-align:center">
+                        @Html.ActionLink("流程", null, null, new { style = "color:blue", onclick = "$('#sSch_" + Model.objDemandDetail[i].oDemandIndex.ToString() + "').toggle();funcShowSchedule('" + Model.objDemandDetail[i].oDemandIndex.ToString() + "')", href = "#" })
+                        <br />
+                        @Html.ActionLink("開發名單", null, null, new { onclick= "funDataSetup('" + Model.objDemandDetail[i].oDemandIndex.ToString() + "')", Style="color:blue", href = "#" } )
+                    </td>
                 </tr>
+                <tr><td colspan="11"><table style="width:100%; display:none; color:blue" border="0" id="sSch_@Model.objDemandDetail[i].oDemandIndex.ToString()"></table></td></tr>
                 <tr><td colspan="11"><hr /></td></tr>
             }
         </table>
+    </div>
+    <div id="sDataCreate" class="modalD" style="display:none;text-align:center">
+        @Html.Hidden("hideDemandIndexDC", "")
+        <script type="text/javascript">
+            FormDataSend = function () {
+                $('#form1').attr("action", baseURL + "DemandDetail/DataListSetup");
+                $('#form1').submit();
+            }
+        </script>
+        <table class="modal_bodyD" style="width:700px;font-size:16px" border="0" cellpadding="0" cellspacing="0">
+            <tr style="height:40px; font-size:20px; font-weight:bold"><td style="width:100%; text-align:center" colspan="4">設定需求單開發名單<hr /></td></tr>
+            <tr style="height:35px">
+                <td style="width:200px; text-align:left; background-color:#5F9EA0; color:white;font-weight:bold">開發工程師</td>
+                <td style="width:700px; text-align:left">@Html.DropDownList("selListH", (IEnumerable<SelectListItem>)ViewBag.selAccountRelatClassH, new { Style="width:400px, height:35px, font-weight:bold; font-size:15px" })</td>
+            </tr>
+            <tr><td colspan="2"><br /></td></tr>
+            <tr style="height:35px">
+                <td style="width:200px; text-align:left; background-color:#5F9EA0; color:white;font-weight:bold">系統分析師</td>
+                <td style="width:700px; text-align:left">@Html.DropDownList("selListI", (IEnumerable<SelectListItem>)ViewBag.selAccountRelatClassI, new { Style = "width:400px, height:35px, font-weight:bold; font-size:15px" })</td>
+            </tr>
+            <tr><td colspan="2"><br /></td></tr>
+            <tr style="height:35px">
+                <td style="width:200px; text-align:left; background-color:#5F9EA0; color:white;font-weight:bold">專案經理</td>
+                <td style="width:700px; text-align:left">@Html.DropDownList("selListJ", (IEnumerable<SelectListItem>)ViewBag.selAccountRelatClassJ, new { Style = "width:400px, height:35px, font-weight:bold; font-size:15px" })</td>
+            </tr>            
+            <tr><td colspan="2"><hr /></td></tr>
+            <tr style="height:40px">
+                <td style="width:100%; text-align:center" colspan="4">
+                    <input type="button" id="btnSubmitF" value="完成開發名單" style="width:200px; height:30px; font-weight:bold; font-size:16px" onclick="return FormDataSend();" />
+                    <input type="button" id="btnReturn" value="取消設定名單" style="width:200px; height:30px; font-weight:bold; font-size:16px" onclick="$('#sDataCreate').hide();" />
+                </td>
+            </tr>
+        </table>
+    </div>
+
 }

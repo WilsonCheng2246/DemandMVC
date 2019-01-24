@@ -16,14 +16,15 @@
             } else {
                 $('#hideDemandUpload').val("X");
             }
-            alert($('#hideDemandUpload').val());
-            alert($('#btnSubmitF').val());
             if ($('#hideDemandUpload').val() == "O") { $('#btnSubmitF').val('上傳檔案'); } else { $('#btnSubmitF').val('完成申請單'); }
-            alert($('#btnSubmitF').val());
         });
+        if ($('#hideSessionIndex').val() != "") {
+            $('#selDemandAccIndex option').filter('[value="' + $('#hideSessionIndex').val() + '"]').attr("selected", true);
+        }
     });
 
-    funReturnDropdown = function (strselValue) {        
+    funReturnDropdown = function (strselValue) {
+        var rtnValue = "";
         if (strselValue != "") {
             var FormURL = baseURL + "DemandDetail/returnValueToAccIndex";
             var objData = { fAccIndex: strselValue };
@@ -39,6 +40,13 @@
                     rtnValue = error.responseText;
                 }
             });
+        }
+        if (strselValue == "")
+        {
+            $('#selDemandTopIndex').empty(); $('#selDemandTopIndex').append($("<option></option>").attr("value", "").text("請選擇"));
+            $('#selDemandManIndex').empty(); $('#selDemandManIndex').append($("<option></option>").attr("value", "").text("請選擇"));
+            $('#selDemandAgentIndex').empty(); $('#selDemandAgentIndex').append($("<option></option>").attr("value", "").text("請選擇"));
+            rtnValue = "";
         }
         if (rtnValue != "") {
             var aryMenu = rtnValue.split('^');
@@ -127,6 +135,7 @@
 </script>
 @using (Html.BeginForm("Create", "DemandDetail", FormMethod.Post, new { id = "form1" }))
 {
+@Html.Hidden("hideSessionIndex", Session["AccIndex"].ToString())
 @Html.Hidden("hideDemandAccIndex", "") @Html.Hidden("hideDemandAccDeptNo", "")
 @Html.Hidden("hideDemandTitle", "") @Html.Hidden("hideDemandClass", "")
 @Html.Hidden("hideDemandTest", "") @Html.Hidden("hideDemandUpload", "")
