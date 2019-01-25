@@ -67,6 +67,10 @@ namespace MvcDemand.Models
             , "@AccJobNo" , "@AccMobile", "@AccPhone", "@AccEmail",  "@AccPassword"
             , "@AccNotation", "@AccImage", "@AccDateS", "@AccDateE", "@AccStatus","@AccNotationS" };
 
+        /// <summary>
+        /// 函數名稱    :   returnDataTable
+        /// </summary>
+        /// <returns></returns>
         public DataTable returnDataTable() {
             funDataTable.Clear(); funQuerySQL = ""; funDicParas = null;
             funQuerySQL = "select a.*, sa.SystemTitle as titleDeptNo, sb.SystemTitle as titleJobNo, sc.SystemTitle as titleClass"
@@ -77,6 +81,10 @@ namespace MvcDemand.Models
             return funDataTable;
         }
 
+        /// <summary>
+        /// 函數名稱    :   listObjccountDetail
+        /// </summary>
+        /// <returns></returns>
         public List<oAccountDetail> listObjAccountDetail() {            
             funDataTable = new DataTable(); funDataTable = returnDataTable();
             var rtnList = (from dt in funDataTable.AsEnumerable()                           
@@ -105,6 +113,12 @@ namespace MvcDemand.Models
             return rtnList;
         }
 
+        /// <summary>
+        /// 函數名稱    :   detailObjAccountDetail
+        /// </summary>
+        /// <param name="funAccIndex"></param>
+        /// <param name="funAccNo"></param>
+        /// <returns></returns>
         public List<oAccountDetail> detailObjAccountDetail(string funAccIndex, string funAccNo)
         {
             List<oAccountDetail> rtnList = new List<oAccountDetail>();
@@ -112,6 +126,10 @@ namespace MvcDemand.Models
             return rtnList;
         }
 
+        /// <summary>
+        /// 函數名稱    :   getNewAccIndex
+        /// </summary>
+        /// <returns></returns>
         public string getNewAccIndex()
         {
             funReturnValue = ""; funQuerySQL = ""; funDicParas = null; funDataTable = new DataTable(); 
@@ -122,6 +140,10 @@ namespace MvcDemand.Models
             return funReturnValue;
         }
         
+        /// <summary>
+        /// 函數名稱    :   returnAccountDataTable
+        /// </summary>
+        /// <returns></returns>
         public DataTable returnAccountDataTable()
         {
             funDataTable = null; funQuerySQL = ""; funDicParas = null;
@@ -142,6 +164,13 @@ namespace MvcDemand.Models
             return funDataTable;
         }
 
+        /// <summary>
+        /// 函數名稱    :   returnAccountDetailValue
+        /// </summary>
+        /// <param name="fAccIndex"></param>
+        /// <param name="fAccNo"></param>
+        /// <param name="fColumnName"></param>
+        /// <returns></returns>
         public string returnAccountDetailValue(string fAccIndex, string fAccNo, string fColumnName)
         {
             funReturnValue = ""; DataTable rtnDt = new DataTable();
@@ -155,8 +184,6 @@ namespace MvcDemand.Models
             }
             return funReturnValue;
         }
-
-        
 
     }
 

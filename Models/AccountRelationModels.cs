@@ -52,6 +52,10 @@ namespace MvcDemand.Models
         public DataTable funDataTable { get; set; }
         public Dictionary<string, object> funDicParas = new Dictionary<string, object>();
 
+        /// <summary>
+        /// 函數名稱    :   returnDataTable
+        /// </summary>
+        /// <returns></returns>
         public DataTable returnDataTable() {
             funDataTable = null; funQuerySQL = ""; funDicParas = null;
             try { 
@@ -67,6 +71,10 @@ namespace MvcDemand.Models
             return funDataTable;
         }
 
+        /// <summary>
+        /// 函數名稱    :   listAccountRelation
+        /// </summary>
+        /// <returns></returns>
         public List<oAccountRelation> listAccountRelation()
         {
             List<oAccountRelation> list = new List<oAccountRelation>();
@@ -85,6 +93,12 @@ namespace MvcDemand.Models
             return list;
         }
 
+        /// <summary>
+        /// 函數名稱    :   returnAccountRelationClassData
+        /// </summary>
+        /// <param name="funRelationClass"></param>
+        /// <param name="funAccDeptNo"></param>
+        /// <returns></returns>
         public string returnAccountRelationClassData(string funRelationClass, string funAccDeptNo)
         {
             funReturnValue = "";
@@ -106,6 +120,11 @@ namespace MvcDemand.Models
             return funReturnValue;
         }
 
+        /// <summary>
+        /// 函數名稱    :   returnAccountRelationDropdownList
+        /// </summary>
+        /// <param name="funAccDeptNo"></param>
+        /// <returns></returns>
         public string returnAccountRelationDropdownList(string funAccDeptNo)
         {
             funReturnValue = "";

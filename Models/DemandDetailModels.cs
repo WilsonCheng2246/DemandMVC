@@ -79,6 +79,12 @@ namespace MvcDemand.Models
         public string aryAccountDetail { get; set; }
         public string aryAccountDeptData { get; set; }
 
+        /// <summary>
+        /// 函數名稱    :   returnSelectAccountData
+        /// </summary>
+        /// <param name="fAccDeptNo"></param>
+        /// <param name="fRelClass"></param>
+        /// <returns></returns>
         public List<SelectListItem> returnSelectAccountData(string fAccDeptNo, string fRelClass)
         {
             List<oAccountRelation> listAcc = new List<oAccountRelation>();
@@ -96,6 +102,10 @@ namespace MvcDemand.Models
             return list;
         }
 
+        /// <summary>
+        /// 函數名稱    :   returnDataTableDemandDetail
+        /// </summary>
+        /// <returns></returns>
         public DataTable returnDataTableDemandDetail()
         {
             Dictionary<string, object> funDicParas = new Dictionary<string,object>(); 
@@ -123,6 +133,10 @@ namespace MvcDemand.Models
             return rtnDT;
         }
 
+        /// <summary>
+        /// 函數名稱    :   objDemandDetailData
+        /// </summary>
+        /// <returns></returns>
         public List<oDemandDetail> objDemandDetailData()
         {
             List<oDemandDetail> list = new List<oDemandDetail>();
@@ -159,6 +173,10 @@ namespace MvcDemand.Models
             return list;
         }
 
+        /// <summary>
+        /// 函數名稱    :   returnDataTableToDemandSchedule
+        /// </summary>
+        /// <returns></returns>
         public DataTable returnDataTableToDemandSchedule()
         {
             Dictionary<string, object> funDicPara = new Dictionary<string, object>();
@@ -171,6 +189,10 @@ namespace MvcDemand.Models
             return rtnDT;
         }
 
+        /// <summary>
+        /// 函數名稱    :   listDemandSchedule
+        /// </summary>
+        /// <returns></returns>
         public List<oDemandSchedule> listDemandSchedule()
         {
             List<oDemandSchedule> list = new List<oDemandSchedule>();
@@ -191,6 +213,10 @@ namespace MvcDemand.Models
             return list;
         }
 
+        /// <summary>
+        /// 函數名稱    :   rtnDataTableToDemandSchedule
+        /// </summary>
+        /// <returns></returns>
         public DataTable rtnDataTableToDemandSchedule()
         {
             Dictionary<string, object> funDicPara = new Dictionary<string, object>();
@@ -216,6 +242,10 @@ namespace MvcDemand.Models
             return rtnDT;
         }
 
+        /// <summary>
+        /// 函數名稱    :   listDemandDetailAndSchedule
+        /// </summary>
+        /// <returns></returns>
         public List<oDemandDetailAndSchedule> listDemandDetailAndSchedule()
         {
             List<oDemandDetailAndSchedule> list = new List<oDemandDetailAndSchedule>();
@@ -262,6 +292,10 @@ namespace MvcDemand.Models
             return list;
         }
 
+        /// <summary>
+        /// 函數名稱    :   returnDemandMaxIndex
+        /// </summary>
+        /// <returns></returns>
         public string returnDemandMaxIndex()
         {
             funReturnValue = ""; funQuerySQL = ""; DataTable rtnDT = new DataTable(); string funMaxIndex = "";

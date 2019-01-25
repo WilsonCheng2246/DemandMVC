@@ -60,8 +60,6 @@ namespace MvcDemand.Controllers
             return View();
         }
 
-        
-
         /// <summary>
         /// 函數名稱    :   LogOut
         /// </summary>

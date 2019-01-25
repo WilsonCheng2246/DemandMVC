@@ -33,6 +33,10 @@ namespace MvcDemand.Models
         public List<string> aryColumnName = new List<string>() { "SystemClass", "SystemValue", "SystemTitle", "SystemNotation", "SystemRemark", "SystemStatus" };
         public List<string> aryDeclareName = new List<string>() { "@SystemClass", "@SystemValue", "@SystemTitle", "@SystemNotation", "@SystemRemark", "@SystemStatus" };
 
+        /// <summary>
+        /// 函數名稱    :   returnDataTable
+        /// </summary>
+        /// <returns></returns>
         public DataTable returnDataTable() {
             try {
                 funDataTable= null; funQuerySQL = ""; funDicParas = null;
@@ -66,6 +70,13 @@ namespace MvcDemand.Models
             return rtnList;
         }
 
+        /// <summary>
+        /// 函數名稱    :detailObjSystemDataDetail
+        /// </summary>
+        /// <param name="fSystemClass"></param>
+        /// <param name="fSystemValue"></param>
+        /// <param name="fSearchValue"></param>
+        /// <returns></returns>
         public List<oSystemDataDetail> detailObjSystemDataDetail(string fSystemClass, string fSystemValue, string fSearchValue) {
             List<oSystemDataDetail> detailList = new List<oSystemDataDetail>();
             try {
@@ -76,6 +87,13 @@ namespace MvcDemand.Models
             return detailList;
         }
 
+        /// <summary>
+        /// 函數名稱    :   selObjSystemDataDetail
+        /// </summary>
+        /// <param name="fSystemClass"></param>
+        /// <param name="fNullTitle"></param>
+        /// <param name="funSort"></param>
+        /// <returns></returns>
         public List<SelectListItem> selObjSystemDataDetail(string fSystemClass, string fNullTitle, string funSort) {
             List<SelectListItem> rtnSelList = new List<SelectListItem>();
             List<oSystemDataDetail> SysList = new List<oSystemDataDetail>();
@@ -94,6 +112,12 @@ namespace MvcDemand.Models
             return rtnSelList;
         }
 
+        /// <summary>
+        /// 函數名稱    :   rtnArraySystemDataClass
+        /// </summary>
+        /// <param name="fSystemClass"></param>
+        /// <param name="fValue"></param>
+        /// <returns></returns>
         public string rtnArraySystemDataClass(string fSystemClass, string fValue)
         {
             funReturnValue = ""; List<oSystemDataDetail> list = new List<oSystemDataDetail>();

@@ -64,6 +64,11 @@ namespace MvcDemand.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// 函數名稱    :   DataListSetp
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
         [HttpPost]
         public RedirectResult DataListSetup(FormCollection form)
         {
@@ -226,6 +231,12 @@ namespace MvcDemand.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// 函數名稱    :   Sign
+        /// </summary>
+        /// <param name="fDemandIndex"></param>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
         public ActionResult Sign(string fDemandIndex, DemandDetailModels viewModel)
         {
             List<oDemandDetail> dDemandDetail = new List<oDemandDetail>();
@@ -256,6 +267,11 @@ namespace MvcDemand.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// 函數名稱    :   Sign
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateInput(false)]
         public RedirectResult Sign(FormCollection form)
@@ -277,17 +293,30 @@ namespace MvcDemand.Controllers
                 string fitManIndex = arModel.listAccountRelation().Where(x => x.oRelationClass == "D" && x.oAccDeptNo == "B01").ToList()[0].oAccIndex.ToString();
                 listSchValue = new List<object>() { fDemandIndex, "E", fitManIndex, "", dbClass.ReturnDetailToNowDateTime("VF"), "X" };
                 string fExecSchValue = dbClass.msExecuteDataBase("N", "DemandSchedule", 0, listSchDeclare, listSchValue);
+                listDemDeclare = new List<string>() { "@DemandIndex", "@DemandStep" };
+                listDemValue = new List<object>() { fDemandIndex, "D" };
+                fExecDeM = dbClass.msExecuteDataBase("U", "DemandDetail", 1, listDemDeclare, listDemValue);
+
             }
             if (fDemandStep == "E")
             {
                 string fitManIndex = arModel.listAccountRelation().Where(x => x.oRelationClass == "D" && x.oAccDeptNo == "B01").ToList()[0].oAccIndex.ToString();
                 listSchValue = new List<object>() { fDemandIndex, "F", fitManIndex, "", dbClass.ReturnDetailToNowDateTime("VF"), "O" };
                 string fExecSchValue = dbClass.msExecuteDataBase("N", "DemandSchedule", 0, listSchDeclare, listSchValue);
+                listDemDeclare = new List<string>() { "@DemandIndex", "@DemandStep" };
+                listDemValue = new List<object>() { fDemandIndex, "F" };
+                fExecDeM = dbClass.msExecuteDataBase("U", "DemandDetail", 1, listDemDeclare, listDemValue);
             }
             return Redirect("~/DemandDetail/Index");
 
         }
 
+        /// <summary>
+        /// 函數名稱    :   Schedule
+        /// </summary>
+        /// <param name="fDemandIndex"></param>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
         public ActionResult Schedule(string fDemandIndex, DemandDetailModels viewModel)
         {
             List<oDemandSchedule> listDeSch = new List<oDemandSchedule>();
@@ -298,6 +327,11 @@ namespace MvcDemand.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// 函數名稱    :   jSonSchedule
+        /// </summary>
+        /// <param name="fDemandIndex"></param>
+        /// <returns></returns>
         public JsonResult jSonSchedule(string fDemandIndex)
         {
             List<oDemandSchedule> listSch = new List<oDemandSchedule>();
