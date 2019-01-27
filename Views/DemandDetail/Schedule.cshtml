@@ -4,25 +4,36 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <table style="width:100%" border="0">
-    <tr style="height:40px; font-size:20px; font-weight:bold"><td style="width:100%; text-align:center" colspan="6">使用帳號關聯資料檔<hr /></td></tr>
+    <tr style="height:40px; font-size:20px; font-weight:bold"><td style="width:100%; text-align:center" colspan="7">需求單申請流程進度表<hr /></td></tr>
+    <tr style="height:30px; font-size:17px; text-align:left">
+        <td style="width:100px; text-align:center; color:white; background-color:blue">需求單號</td>
+        <td style="width:700px; text-align:left" colspan="5">
+            <a href="/Demand/DemandDetail/Detail?fDemandIndex=@ViewBag.vDemandIndex" style="color:blue">@ViewBag.vDemandIndex</a>
+       
+        </td>
+        <td style="width:100px; text-align:right">@Html.ActionLink("需求單清單", "Index", "DemandDetail", new { Style="color:blue" })</td>        
+    </tr>
     <tr style="height:30px; color:white;font-size:17px; background-color:blue; text-align:center">
-        <td style="width:100px; text-align:center">需求單號</td>
-        <td style="width:100px; text-align:center">申請進度</td>
+        <td style="width:100px"></td>
+        <td style="width:50px; text-align:center">進度</td>
+        <td style="width:100px; text-align:center">申請進度說明</td>
         <td style="width:200px; text-align:center">簽核帳號</td>
-        <td style="width:100px; text-align:center">簽核狀態</td>
+        <td style="width:50px; text-align:center">狀態</td>
         <td style="width:300px; text-align:center">簽核意見</td>
         <td style="width:100px; text-align:center">簽核日期</td>
     </tr>
-    <tr><td colspan="6"><hr /></td></tr>
+    <tr><td colspan="7"><hr /></td></tr>
     @foreach (oDemandSchedule item in Model.objDemandSchedule)
     {
-        <tr style="height:30px; font-size:15px; color:blue">
-            <td style="width:100px; text-align:center">@item.oDemandIndex</td>
-            <td style="width:150px; text-align:left">(@item.oDemandStep)@item.oDemandStepTitle</td>
+        <tr style="height:30px; font-size:15px; color:black">
+            <td style="width:100px"></td>
+            <td style="width:50px; text-align:center">@item.oDemandStep</td>
+            <td style="width:150px; text-align:left">@item.oDemandStepTitle</td>
             <td style="width:200px; text-align:left">(@item.oSchAccNo)@item.oSchAccName</td>
-            <td style="width:100px; text-align:center">@item.oSchStatus</td>
-            <td style="width:250px; text-align:center">@Html.Raw(item.oSchNotation)</td>
+            <td style="width:50px; text-align:center">@item.oSchStatus</td>
+            <td style="width:250px; text-align:left">@Html.Raw(HttpUtility.HtmlDecode(item.oSchNotation))</td>
             <td style="width:100px; text-align:center">@string.Format(@"{0}/{1}/{2}",item.oSchDateTime.Substring(0,4), item.oSchDateTime.Substring(4,2), item.oSchDateTime.Substring(6,2))</td>
         </tr>
+        <tr><td style="width:100px"></td><td colspan="6"><hr /></td></tr>
     }
 </table>

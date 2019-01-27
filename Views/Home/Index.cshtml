@@ -4,36 +4,39 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <table style="width:100%" border="0" cellpadding="0" cellspacing="0">
-    <tr style="height:40px; font-size:20px; font-weight:bold"><td style="width:100%; text-align:center" colspan="11">需求申請單未點選清單<hr /></td></tr>
+    <tr style="height:40px; font-size:20px; font-weight:bold"><td style="width:100%; text-align:center" colspan="9">需求申請單未點選清單<hr /></td></tr>
     <tr style="height:35px; color:white;font-size:17px; background-color:blue; text-align:center">
         <td style="width:100px;">序號</td>
-        <td style="width:100px">申請日期</td>
-        <td style="width:100px">類別</td>
-        <td style="width:100px">進度</td>
-        <td style="width:100px">狀態</td>
-        <td style="width:50px">測試<br />檔案</td>        
         <td style="width:100px">申請日期<br />到期日期</td>
-        <td style="width:100px">申請帳號</td>
-        <td style="width:50px">流程</td>
-        <td style="width:50px">明細</td>
-        <td style="width:50px">流程單</td>
+        <td style="width:100px">需求類別</td>
+        <td style="width:200px">申請進度<br />需求單狀態</td>
+        <td style="width:150px">申請帳號<br />目前簽核帳號</td>
+        <td style="width:50px">簽核</td>
+        <td style="width:100px">檔案上傳<br />檔案清單</td>
+        <td style="width:50px">開發<br />測試</td>        
+        <td style="width:50px">流程單</td>        
     </tr>
     <tr><td colspan="11"><hr /></td></tr>
     @foreach (oDemandDetailAndSchedule item in Model.homeListDemandSchedule)
     {
-        <tr style="height:30px; font-size:15px; color:blue">
-            <td style="width:100px; text-align:left">@item.oDemandIndex</td>
-            <td style="width:100px; text-align:left">@string.Format(@"{0}/{1}/{2}", item.oDemandDate.Substring(0,4), item.oDemandDate.Substring(4,2), item.oDemandDate.Substring(6,2))</td>
-            <td style="width:100px; text-align:center">@item.oDemandClassTitle</td>
-            <td style="width:100px; text-align:center">@item.oDemandStepTitle</td>
-            <td style="width:100px; text-align:center">@item.oDemandStatusTitle</td>
-            <td style="width:50px; text-align:center">@item.oDemandTest</td>            
+        <tr style="height:30px; font-size:15px;">
+            <td style="width:100px; text-align:center">
+                @Html.ActionLink(@item.oDemandIndex, null, null, new { Style="color:brown", href="/Demand/DemandDetail/Detail?fDemandIndex=" + @item.oDemandIndex + "" })
+            </td>
             <td style="width:100px; text-align:center">@item.oDemandDateS <br /> @item.oDemandDateH</td>
-            <td style="width:100px; text-align:center">@item.oDemandAccNumber <br /> @item.oDemandAccNumberName</td>
-            <td style="width:50px; text-align:center; color:blue">@Html.ActionLink("簽到", null, null, new { Style = "color:blue", href = "/Demand/DemandDetail/Sign?fDemandIndex=" + @item.oDemandIndex + "" })</td>
-            <td style="width:50px; text-align:center; color:blue">@Html.ActionLink("簽核", null, null, new { Style = "color:blue", href = "/Demand/DemandDetail/Schedule?fDemandIndex=" + @item.oDemandIndex + "" })</td>
-            <td style="width:50px"></td>
+            <td style="width:100px; text-align:center">@item.oDemandClassTitle</td>
+            <td style="width:200px; text-align:center">(@item.oDemandStep) @item.oDemandStepTitle <br /> @item.oDemandStatusTitle</td>
+            <td style="width:150px; text-align:center">
+                (@item.oDemandAccNumber)  @item.oDemandAccNumberName <br /> 
+                (@item.oSchAccNo) @item.oSchAccName 
+            </td>
+            <td style="width:50px; text-align:center; color:blue">
+                @Html.ActionLink("簽核", null, null, new { Style = "color:blue", href = "/Demand/DemandDetail/Sign?fDemandIndex=" + @item.oDemandIndex + "" })
+            </td>
+            <td style="width:100px; text-align:center">@item.oDemandUpload </td>            
+            <td style="width:50px; text-align:center">@item.oDemandTest</td>            
+            <td style="width:50px; text-align:center; color:blue">@Html.ActionLink("流程單", null, null, new { Style = "color:blue", href = "/Demand/DemandDetail/Schedule?fDemandIndex=" + @item.oDemandIndex + "" })</td>            
         </tr>
-        <tr><td colspan="11"><hr /></td></tr>
+        <tr><td colspan="9"><hr /></td></tr>
     }
 </table>

@@ -64,7 +64,7 @@ namespace MvcDemand.Controllers
             ViewBag.valSearchClass = fSearchClass;
             ViewBag.valSearchDept = fSearchDept;
             ViewBag.valSearchJob = fSearchJob;
-            getBindData(fSearchValue, "1", viewModel, fSearchClass, fSearchDept, fSearchJob);
+            getBindData(fSearchValue, form["hidePageIndex"].ToString(), viewModel, fSearchClass, fSearchDept, fSearchJob);
             return View(viewModel);
         }
 

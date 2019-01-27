@@ -37,7 +37,14 @@ namespace MvcDemand.Controllers
         /// <returns></returns>
         public ActionResult Index(DemandDetailModels viewModel)
         {
-            viewModel.objDemandDetail = ddModel.objDemandDetailData();
+            List<oDemandSchedule> listS = new List<oDemandSchedule>();
+            listS = ddModel.listDemandSchedule();
+            listS = listS.Where(x => x.oSchAccIndex.Contains(Session["AccIndex"].ToString())).ToList();
+            if (listS.Count > 0)
+            {
+                viewModel.objDemandDetail = ddModel.objDemandDetailData().Where(x=>x.oDemandIndex.Contains(listS[0].oDemandIndex)).ToList();
+            }
+            
             ViewBag.objDemandDetail = ddModel.objDemandDetailData();
             ViewBag.valCountSum = viewModel.objDemandDetailData().Count().ToString();
             List<oAccountRelation> listR = new List<oAccountRelation>();
@@ -324,6 +331,7 @@ namespace MvcDemand.Controllers
             listDeSch = listDeSch.Where(x => x.oDemandIndex == fDemandIndex).ToList();
             viewModel.objDemandSchedule = listDeSch;
             ViewBag.objDemandSchedule = viewModel.objDemandSchedule;
+            ViewBag.vDemandIndex = fDemandIndex;
             return View(viewModel);
         }
 
@@ -340,7 +348,13 @@ namespace MvcDemand.Controllers
             return Json(listSch);
         }
 
-
-
+        public ActionResult Detail(string fDemandIndex, DemandDetailModels viewModel)
+        {
+            string fDetail = ddModel.showDetailDemandDetail(fDemandIndex);
+            viewModel.sDemandDetail = fDetail;
+            ViewBag.sDemandDetail = viewModel.sDemandDetail;
+            return View(viewModel);
+        }
+        
     }
 }
