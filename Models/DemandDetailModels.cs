@@ -107,7 +107,7 @@ namespace MvcDemand.Models
         /// 函數名稱    :   returnDataTableDemandDetail
         /// </summary>
         /// <returns></returns>
-        public DataTable returnDataTableDemandDetail()
+        public DataTable returnDataTableDemandDetail(string fDemandIndex)
         {
             Dictionary<string, object> funDicParas = new Dictionary<string,object>(); 
             DataTable rtnDT = new DataTable(); funQuerySQL = ""; funDicParas = null;
@@ -126,7 +126,13 @@ namespace MvcDemand.Models
 	                            left join AccountDetail ada on ada.AccIndex=dd.DemandAccIndex 
 	                            left join AccountDetail adb on adb.AccIndex = dd.DemandAgentIndex
 	                            left join AccountDetail adc on adc.AccIndex = dd.DemandTopIndex
-	                            left join AccountDetail ade on ade.AccIndex = dd.DemandManIndex");
+	                            left join AccountDetail ade on ade.AccIndex = dd.DemandManIndex
+                                where 1=1");
+                if (fDemandIndex != "") {
+                    if (fDemandIndex != "00019") {
+                        funQuerySQL += string.Format(@" and dd.DemandIndex in (select DemandIndex from DemandSchedule where SchAccIndex='{0}') ", fDemandIndex);
+                    }
+                }
                 rtnDT = dbClass.msDataTableToDataBase(funQuerySQL, funDicParas);
             } catch (Exception ex) {
                 rtnDT.Clear();
@@ -142,7 +148,7 @@ namespace MvcDemand.Models
         {
             List<oDemandDetail> list = new List<oDemandDetail>();
             try {
-                list = (from dt in returnDataTableDemandDetail().AsEnumerable()
+                list = (from dt in returnDataTableDemandDetail("").AsEnumerable()
                         select new oDemandDetail
                         {
                             oDemandIndex = dt.Field<string>("DemandIndex"), oDemandDate = dt.Field<string>("DemandDate"),
@@ -171,6 +177,50 @@ namespace MvcDemand.Models
             } catch (Exception ex) {
                 list = null;
             }
+            return list;
+        }
+
+        public List<oDemandDetail> objDemandDetailDataSchedule(string fAccIndex)
+        {
+            List<oDemandDetail> list = new List<oDemandDetail>();
+            DataTable rtnDT = new DataTable();
+            rtnDT = returnDataTableDemandDetail(fAccIndex);
+            list = (from dt in rtnDT.AsEnumerable()
+                    select new oDemandDetail
+                    {
+                        oDemandIndex = dt.Field<string>("DemandIndex"),
+                        oDemandDate = dt.Field<string>("DemandDate"),
+                        oDemandTitle = dt.Field<string>("DemandTitle"),
+                        oDemandClass = dt.Field<string>("DemandClass"),
+                        oDemandTest = dt.Field<string>("DemandTest"),
+                        oDemandUpload = dt.Field<string>("DemandUpload"),
+                        oDemandStep = dt.Field<string>("DemandStep"),
+                        oDemandFrom = dt.Field<string>("DemandFrom"),
+                        oDemandProject = dt.Field<string>("DemandProject"),
+                        oDemandDateS = dt.Field<string>("DemandDateS"),
+                        oDemandDateE = dt.Field<string>("DemandDateE"),
+                        oDemandDateH = dt.Field<string>("DemandDateH"),
+                        oDemandNotation = dt.Field<string>("DemandNotation"),
+                        oDemandRemark = dt.Field<string>("DemandRemark"),
+                        oDemandStatus = dt.Field<string>("DemandStatus"),
+                        oDemandAccIndex = dt.Field<string>("DemandAccIndex"),
+                        oDemandAgentIndex = dt.Field<string>("DemandAgentIndex"),
+                        oDemandTopIndex = dt.Field<string>("DemandTopIndex"),
+                        oDemandManIndex = dt.Field<string>("DemandManIndex"),
+                        oUpdate_DateTime = dt.Field<string>("Update_DateTime"),
+                        oCreate_DateTime = dt.Field<string>("Create_DateTime"),
+                        oDemandClassTitle = dt.Field<string>("DemandClassTitle"),
+                        oDemandStepTitle = dt.Field<string>("DemandStepTitle"),
+                        oDemandStatusTitle = dt.Field<string>("DemandStatusTitle"),
+                        oDemandAccNumber = dt.Field<string>("AccNumber"),
+                        oDemandAccNumberName = dt.Field<string>("AccName"),
+                        oDemandAgentNumber = dt.Field<string>("AgentNumber"),
+                        oDemandAgentName = dt.Field<string>("AgentName"),
+                        oDemandTopNumber = dt.Field<string>("TopNumber"),
+                        oDemandTopName = dt.Field<string>("TopName"),
+                        oDemandManNumber = dt.Field<string>("ManNumber"),
+                        oDemandManName = dt.Field<string>("ManName")
+                    }).ToList();
             return list;
         }
 

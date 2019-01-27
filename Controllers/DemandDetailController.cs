@@ -38,14 +38,15 @@ namespace MvcDemand.Controllers
         public ActionResult Index(DemandDetailModels viewModel)
         {
             List<oDemandSchedule> listS = new List<oDemandSchedule>();
-            listS = ddModel.listDemandSchedule();
-            listS = listS.Where(x => x.oSchAccIndex.Contains(Session["AccIndex"].ToString())).ToList();
-            if (listS.Count > 0)
-            {
-                viewModel.objDemandDetail = ddModel.objDemandDetailData().Where(x=>x.oDemandIndex.Contains(listS[0].oDemandIndex)).ToList();
-            }
-            
-            ViewBag.objDemandDetail = ddModel.objDemandDetailData();
+            listS = ddModel.listDemandSchedule();            
+            List<oDemandDetail> listD = new List<oDemandDetail>();
+            if (Session["AccJobNo"].ToString() != "K") {
+                listD = ddModel.objDemandDetailDataSchedule(Session["AccIndex"].ToString());
+            } else {
+                listD = ddModel.objDemandDetailData();
+            }            
+            viewModel.objDemandDetail = listD;
+            ViewBag.objDemandDetail = viewModel.objDemandDetail;
             ViewBag.valCountSum = viewModel.objDemandDetailData().Count().ToString();
             List<oAccountRelation> listR = new List<oAccountRelation>();
             listR = arModel.listAccountRelation();

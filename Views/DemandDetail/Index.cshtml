@@ -133,27 +133,30 @@
                 <td style="width:50px">流程單</td>
             </tr>
             <tr><td style="width:100%" colspan="11"><hr /></td></tr>
-            @for (int i = countTop; i < countDown; i++)
+            @if (Model.objDemandDetail.Count > 0)
             {
-                <tr style="height:30px">
-                    <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandIndex.ToString()</td>
-                    <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandDate.ToString().Substring(0, 8)</td>
-                    <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandClassTitle.ToString()</td>
-                    <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandStepTitle.ToString()</td>
-                    <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandStatusTitle.ToString()</td>
-                    <td style="width:50px; text-align:center">@Model.objDemandDetail[i].oDemandTest.ToString()</td>
-                    <td style="width:50px; text-align:center">@Model.objDemandDetail[i].oDemandUpload.ToString()</td>
-                    <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandDateS.ToString()</td>
-                    <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandAccNumberName.ToString()</td>
-                    <td style="width:50px; text-align:center">明細</td>
-                    <td style="width:50px; text-align:center">
-                        @Html.ActionLink("流程", null, null, new { style = "color:blue", onclick = "$('#sSch_" + Model.objDemandDetail[i].oDemandIndex.ToString() + "').toggle();funcShowSchedule('" + Model.objDemandDetail[i].oDemandIndex.ToString() + "')", href = "#" })
-                        <br />
-                        @Html.ActionLink("開發名單", null, null, new { onclick= "funDataSetup('" + Model.objDemandDetail[i].oDemandIndex.ToString() + "')", Style="color:blue", href = "#" } )
-                    </td>
-                </tr>
-                <tr><td colspan="11"><table style="width:100%; display:none; color:blue" border="0" id="sSch_@Model.objDemandDetail[i].oDemandIndex.ToString()"></table></td></tr>
-                <tr><td colspan="11"><hr /></td></tr>
+                for (int i = countTop; i < countDown; i++)
+                {
+                    <tr style="height:30px">
+                        <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandIndex.ToString()</td>
+                        <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandDate.ToString().Substring(0, 8)</td>
+                        <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandClassTitle.ToString()</td>
+                        <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandStepTitle.ToString()</td>
+                        <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandStatusTitle.ToString()</td>
+                        <td style="width:50px; text-align:center">@Model.objDemandDetail[i].oDemandTest.ToString()</td>
+                        <td style="width:50px; text-align:center">@Model.objDemandDetail[i].oDemandUpload.ToString()</td>
+                        <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandDateS.ToString()</td>
+                        <td style="width:100px; text-align:center">@Model.objDemandDetail[i].oDemandAccNumberName.ToString()</td>
+                        <td style="width:50px; text-align:center">明細</td>
+                        <td style="width:50px; text-align:center">
+                            @Html.ActionLink("流程", null, null, new { style = "color:blue", onclick = "$('#sSch_" + Model.objDemandDetail[i].oDemandIndex.ToString() + "').toggle();funcShowSchedule('" + Model.objDemandDetail[i].oDemandIndex.ToString() + "')", href = "#" })
+                            <br />
+                            @Html.ActionLink("開發名單", null, null, new { onclick = "funDataSetup('" + Model.objDemandDetail[i].oDemandIndex.ToString() + "')", Style = "color:blue", href = "#" })
+                        </td>
+                    </tr>
+                    <tr><td colspan="11"><table style="width:100%; display:none; color:blue" border="0" id="sSch_@Model.objDemandDetail[i].oDemandIndex.ToString()"></table></td></tr>
+                    <tr><td colspan="11"><hr /></td></tr>
+                }
             }
         </table>
     </div>
